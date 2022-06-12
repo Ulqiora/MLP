@@ -24,8 +24,7 @@ public:
     explicit NerualNetworkMatrix(unsigned int numHiddenLayers);
     void loadWeight(const QFile& filename);
     void saveWeight(const QFile& filename);
-
-    void train(int epoch,Dataset& data);
+    void train(unsigned int epoch,Dataset& data);
     void trainCrossValidation(int numOfGroup,Dataset& data);
 
 private:
@@ -33,16 +32,18 @@ private:
     unsigned int _hiddenLayers;
     std::vector<Matrix> _neuronWeightMat;
     std::vector<Matrix> _biosWeightMat;
-    std::vector<Matrix> _errorMatrix;
+    std::vector<Matrix> _valueNeruals;
+    std::vector<Matrix> _valueErrors;
     double _currentError;
 
 private:
     void setWeightMatrix();
     void setBiosMatrix();
-    int forwardPropagation(double* pixels,int answer=0);
+    void forwardPropagation(double* pixels);
     void backPropagation();
-    void addErrorToCurrent(Matrix& outputNeruals);
-    int getPredict(Matrix& outputNeruals);
+    void calcError(unsigned int answer);
+    int getPredict();
+    void updateWeight();
 };
 
 
