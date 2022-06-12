@@ -18,6 +18,7 @@ class Matrix {
  public:
     Matrix();
     Matrix(int rows, int cols);
+    Matrix(double* mass,int numOfElem);
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     ~Matrix();

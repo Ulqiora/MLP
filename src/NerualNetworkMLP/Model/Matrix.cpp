@@ -12,6 +12,14 @@ Matrix::Matrix(int rows, int cols) : _rows(rows), _cols(cols) {
     }
 }
 
+Matrix::Matrix(double* mass,int numOfElem):_rows(numOfElem),_cols(1){
+    if(numOfElem<0&& mass==nullptr) throw std::invalid_argument("Invalid size of matrix");
+    _matrix=New_matrix(this->_rows, this->_cols);
+    for(int i=0;i<numOfElem;i++){
+        _matrix[i][0]=mass[i];
+    }
+}
+
 Matrix::Matrix(const Matrix& other) : _rows(other._rows), _cols(other._cols) {
     this->CopyMatrix(other._matrix);
 }

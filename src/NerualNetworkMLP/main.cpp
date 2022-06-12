@@ -1,9 +1,8 @@
-#include "Model/Matrix.h"
+#include "Model/Dataset.h"
 int main()
 {
-    s21::Matrix a(2,10);
-    a.setRandom();
-    a.setValueForAll(1.023);
-    a.print();
+    std::string str("../../datasets/emnist-letters/emnist-letters-train.csv");
+    s21::Dataset dataset(str);
+    std::cout<<dataset._data[0]._pixels[86];
     return 0;
 }
