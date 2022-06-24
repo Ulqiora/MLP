@@ -2,56 +2,76 @@
 #define DATASET_H
 #include <vector>
 #include <iostream>
+#pragma once
 #include <fstream>
-#include <sstream>
 #include <string>
+#include <sstream>
+#include "constantValues.h"
 namespace s21{
-enum {NUM_OF_PIXELS=784};
-struct Image{
-    int _numOfSymbol;
+
+class Image{
+public:
+    Image()=default;
+    Image(std::stringstream& imageString){
+        for(int i=0;i<NUM_OF_PIXELS;++i){
+            imageString>>_pixels[i];
+            if(imageString.peek()!=','||(imageString.peek()!='\n' && i==NUM_OF_PIXELS-1)){
+                throw std::invalid_argument("Error load dataset!");
+            }
+        }
+    }
+
+    double& operator()(int i){
+        return _pixels[i];
+    }
+private:
     double _pixels[NUM_OF_PIXELS];
 };
 
 class Dataset
 {
 private:
-    void parseImage(std::string& filename){
+    void parse(std::string& filename){
         std::ifstream file(filename);
         std::stringstream ss;
         std::string currentLine="fsda";
-        int imageInfo=5;
-        if(!file.is_open()) throw std::invalid_argument("Error load dataset!");
+        int imageInfo;
+        if(!file.is_open()) {
+            throw std::invalid_argument("Error load dataset!");
+        }
         while(std::getline(file,currentLine)){
             ss.clear();
             ss.str(currentLine);
-            Image photo;
-            for(int i = 0;i <= NUM_OF_PIXELS; i++){
-                ss >> imageInfo;
-                if(i > 0){
-                    photo._pixels[i-1]=imageInfo;
-                } else {
-                    photo._numOfSymbol=imageInfo;
-                }
-                if(ss.peek() == ','){
-                    ss.ignore();
-                } else if(!(ss.eof() && i==NUM_OF_PIXELS)){
-                    std::cout<<ss.eof()<<std::endl<<i;
-                    throw std::invalid_argument("this file is not in the correct format!");
-                }
+            ss>>imageInfo;
+            _answers.push_back(imageInfo);
+            if(ss.peek()!=',')
+                throw std::invalid_argument("Error,wrong file!");
+            try {
+                _images.push_back(Image(ss));
+            }  catch (std::exception& e) {
+                throw;
             }
-            _data.push_back(photo);
+
         }
         file.close();
     }
+    std::vector<Image> _images;
+    std::vector<int> _answers;
 public:
-    explicit Dataset(std::string& filename):_data(0){
-        parseImage(filename);
+    explicit Dataset(std::string& filename):_images(0),_answers(0){
+        try {
+            parse(filename);
+        }  catch (std::exception& e) {
+            throw;
+        }
     }
-    std::vector<Image> _data;
-    Image& operator()(int i){
-        return _data[i];
+
+    Image& getImage(int i){
+        return _images[i];
+    }
+    int& getAnswer(int i){
+        return _answers[i];
     }
 };
-
 }    //     namespace s21
 #endif // DATASET_H
