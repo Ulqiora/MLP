@@ -1,18 +1,18 @@
-#include "ActicateFunction.h"
+#include "ActivateFunction.h"
 
 namespace  s21{
-ActicateFunction::ActicateFunction(typeFunction type)
+ActivateFunction::ActivateFunction(typeFunction type)
 {
     if(type==typeFunction::SIGMOIND){
         _function=[](double x){return 1/(1+std::exp(-x));};
         _derivative=[this](double x){return _function(x)*(1-_function(x));};
     }
 }
-double ActicateFunction::use(double arg){
+double ActivateFunction::use(double arg){
     return _function(arg);
 }
 
-Matrix ActicateFunction::use(Matrix& arg){
+Matrix ActivateFunction::use(Matrix& arg){
     int rows=arg.getRows(),cols=arg.getCols();
     Matrix result(rows,cols);
     for(int i=0;i<rows;i++){
@@ -23,11 +23,11 @@ Matrix ActicateFunction::use(Matrix& arg){
     return result;
 }
 
-double ActicateFunction::useDerivative(double arg){
+double ActivateFunction::useDerivative(double arg){
     return _derivative(arg);
 }
 
-Matrix ActicateFunction::useDerivative(Matrix& arg){
+Matrix ActivateFunction::useDerivative(Matrix& arg){
     int rows=arg.getRows(),cols=arg.getCols();
     Matrix result(rows,cols);
     for(int i=0;i<rows;i++){

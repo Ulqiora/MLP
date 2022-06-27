@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <QDebug>
 #include "constantValues.h"
 namespace s21{
 
@@ -15,8 +16,10 @@ public:
     Image(std::stringstream& imageString){
         for(int i=0;i<NUM_OF_PIXELS;++i){
             imageString>>_pixels[i];
-            if(imageString.peek()!=','||(imageString.peek()!='\n' && i==NUM_OF_PIXELS-1)){
-                throw std::invalid_argument("Error load dataset!");
+            if(imageString.peek()==',' && i<NUM_OF_PIXELS){
+                imageString.ignore();
+            }else if(!imageString.eof()){
+                throw std::invalid_argument("Error, wrong file format");
             }
         }
     }
@@ -34,7 +37,7 @@ private:
     void parse(std::string& filename){
         std::ifstream file(filename);
         std::stringstream ss;
-        std::string currentLine="fsda";
+        std::string currentLine="";
         int imageInfo;
         if(!file.is_open()) {
             throw std::invalid_argument("Error load dataset!");
@@ -45,11 +48,12 @@ private:
             ss>>imageInfo;
             _answers.push_back(imageInfo);
             if(ss.peek()!=',')
-                throw std::invalid_argument("Error,wrong file!");
+                throw std::invalid_argument("Error,wrong file!1");
+            ss.ignore();
             try {
                 _images.push_back(Image(ss));
             }  catch (std::exception& e) {
-                throw;
+                throw e;
             }
 
         }
@@ -58,11 +62,22 @@ private:
     std::vector<Image> _images;
     std::vector<int> _answers;
 public:
+    Dataset():_images(0),_answers(0){}
     explicit Dataset(std::string& filename):_images(0),_answers(0){
         try {
             parse(filename);
         }  catch (std::exception& e) {
-            throw;
+            throw std::invalid_argument("Error,wrong file!3");
+        }
+    }
+
+    void setDate(std::string& filename){
+        _images.clear();
+        _answers.clear();
+        try {
+            parse(filename);
+        }  catch (std::exception& e) {
+            throw std::invalid_argument("Error,wrong file!4");
         }
     }
 
@@ -71,6 +86,10 @@ public:
     }
     int& getAnswer(int i){
         return _answers[i];
+    }
+
+    int getSize(){
+        return _answers.size();
     }
 };
 }    //     namespace s21

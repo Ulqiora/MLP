@@ -1,8 +1,12 @@
 #include "Model/Dataset.h"
-int main()
+#include "Model/GNN/GNN.h"
+//#include <QApplication>
+//#include <QFileDialog>
+int main(/*int argc, char *argv[]*/)
 {
-    std::string str("../../datasets/emnist-letters/emnist-letters-train.csv");
-    s21::Dataset dataset(str);
-    std::cout<<dataset._data[0]._pixels[86];
+//    QApplication a(argc, argv);
+//    std::string str=QFileDialog::getOpenFileName().toStdString();
+    s21::GraphNerualNetwork gnn(2);
+    qDebug()<<gnn.getLayer(3).getNumOfNeurons();
     return 0;
 }

@@ -7,13 +7,13 @@ namespace s21{
 
 enum class typeFunction{SIGMOIND=1};
 
-class ActicateFunction
+class ActivateFunction
 {
 private:
     std::function<double(double)> _function;
     std::function<double(double)> _derivative;
 public:
-    explicit ActicateFunction(typeFunction type=typeFunction::SIGMOIND);
+    explicit ActivateFunction(typeFunction type=typeFunction::SIGMOIND);
     double use(double arg);
     Matrix use(Matrix& arg);
     double useDerivative(double arg);

@@ -1,5 +1,6 @@
 #pragma once
 #include "Neuron.h"
+#include "../ActivateFunction.h"
 namespace s21
 {
 class Layer{
@@ -16,7 +17,24 @@ public:
             _neurons.push_back(neuron);
         }
     }
-    
+
+    void calcForForwardPropagation(Layer& layer,ActivateFunction& _func){
+        for(int i=0;i<getNumOfNeurons();++i){
+            double sum=0.0;
+            for(int j=0;j<layer.getNumOfNeurons();++j){
+                sum+=(layer._neurons[j]->getValue()*_neurons[i]->getWeight(j));
+            }
+            _neurons[i]->setValue(_func.use(sum));
+
+        }
+    }
+
+    int getNumOfNeurons(){
+        return _neurons.size();
+    }
+    Neuron getNeuron(int i){
+        return *(_neurons[i]);
+    }
 };
 
 

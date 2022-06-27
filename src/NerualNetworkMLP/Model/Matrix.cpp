@@ -283,9 +283,10 @@ Matrix Matrix::inverse_matrix() {
     }
 }
 // Accessors & mutators
-int Matrix::getRows() { return this->_rows; }
+int Matrix::getRows() const { return this->_rows; }
 
-int Matrix::getCols() { return this->_cols; }
+int Matrix::getCols() const { return this->_cols; }
+
 void Matrix::setRandom(){
     for(int i=0;i<_rows;i++){
         for(int j=0;j<_cols;j++){
@@ -302,7 +303,7 @@ void Matrix::setValueForAll(double value){
     }
 }
 
-void Matrix::print(){
+void Matrix::print() const {
     for(int i=0;i<_rows;i++){
         for(int j=0;j<_cols;j++){
             std::cout<< _matrix[i][j]<<" ";

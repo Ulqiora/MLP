@@ -14,16 +14,16 @@ SOURCES += \
 #    ../src/NerualNetworkMLP/Model/Neuron.cpp \
 #    ../src/NerualNetworkMLP/CustomWidget/qpainter.cpp \
 #    ../src/NerualNetworkMLP/Model/INerualNetwork.cpp \
-#    ../src/NerualNetworkMLP/Model/Matrix.cpp \
-    ../src/NerualNetworkMLP/Model/ActicateFunction.cpp
+    ../src/NerualNetworkMLP/Model/Matrix.cpp \
+    ../src/NerualNetworkMLP/Model/ActivateFunction.cpp
 
 HEADERS += \
 #    ../src/NerualNetworkMLP/View/viewapplication.h\
 #    ../src/NerualNetworkMLP/Model/Neuron.h \
 #    ../src/NerualNetworkMLP/CustomWidget/qpainter.h \
-    ../src/NerualNetworkMLP/Model/ActicateFunction.h \
+    ../src/NerualNetworkMLP/Model/ActivateFunction.h \
 #    ../src/NerualNetworkMLP/Model/INerualNetwork.h \
-#    ../src/NerualNetworkMLP/Model/Matrix.h \
+    ../src/NerualNetworkMLP/Model/Matrix.h \
     ../src/NerualNetworkMLP/Model/Dataset.h \
     ../src/NerualNetworkMLP/Model/GNN/GNN.h \
     ../src/NerualNetworkMLP/Model/GNN/Neuron.h \

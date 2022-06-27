@@ -67,7 +67,7 @@ void NerualNetworkMatrix::calcError(unsigned int answer){
         for(int j=0;j<TypeLayer::HIDDEN;j++){
             errors(j,0)*=_func.useDerivative(_valueNeruals[i+1](j,0));
         }
-        _valueErrors[i]=
+//        _valueErrors[i]=
     }
 }
 
@@ -93,8 +93,4 @@ void NerualNetworkMatrix::train(unsigned int epoch,Dataset& data){
 void NerualNetworkMatrix::backPropagation(){
 
 }
-
-
-
-
 }
