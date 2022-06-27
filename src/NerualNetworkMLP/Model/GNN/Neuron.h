@@ -11,6 +11,7 @@ namespace s21{
 class Neuron{
 private:
     double _value;
+    double _error;
     std::vector<double> _weights;
 
 public:
@@ -23,14 +24,14 @@ public:
     int getNumOfWeights(){
         return _weights.size();
     }
-    void setValue(double other){
-        _value=other;
-    }
-    double getValue(){
+    double& getValue(){
         return _value;
     }
-    double getWeight(int i){
+    double& getWeight(int i){
         return _weights[i];
+    }
+    double& getError(){
+        return _error;
     }
 };
 

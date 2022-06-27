@@ -24,17 +24,17 @@ public:
             for(int j=0;j<layer.getNumOfNeurons();++j){
                 sum+=(layer._neurons[j]->getValue()*_neurons[i]->getWeight(j));
             }
-            _neurons[i]->setValue(_func.use(sum));
-
+            _neurons[i]->getValue()=_func.use(sum);
         }
     }
 
     int getNumOfNeurons(){
         return _neurons.size();
     }
-    Neuron getNeuron(int i){
+    Neuron& operator()(int i){
         return *(_neurons[i]);
     }
+
 };
 
 

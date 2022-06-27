@@ -16,9 +16,11 @@ public:
     Image(std::stringstream& imageString){
         for(int i=0;i<NUM_OF_PIXELS;++i){
             imageString>>_pixels[i];
-            if(imageString.peek()==',' && i<NUM_OF_PIXELS){
+            _pixels[i]=_pixels[i]/255.0;
+            if(imageString.peek()==',' && i!=NUM_OF_PIXELS-1){
                 imageString.ignore();
-            }else if(!imageString.eof()){
+            }else if(!(imageString.eof() || imageString.peek()=='\r')){
+                qDebug()<<"|"<<imageString.peek()<<"|";
                 throw std::invalid_argument("Error, wrong file format");
             }
         }
@@ -40,6 +42,7 @@ private:
         std::string currentLine="";
         int imageInfo;
         if(!file.is_open()) {
+            qDebug()<<"Error load dataset!";
             throw std::invalid_argument("Error load dataset!");
         }
         while(std::getline(file,currentLine)){
@@ -47,8 +50,10 @@ private:
             ss.str(currentLine);
             ss>>imageInfo;
             _answers.push_back(imageInfo);
-            if(ss.peek()!=',')
+            if(ss.peek()!=','){
+                qDebug()<<"Error,wrong file!1";
                 throw std::invalid_argument("Error,wrong file!1");
+            }
             ss.ignore();
             try {
                 _images.push_back(Image(ss));
@@ -67,7 +72,7 @@ public:
         try {
             parse(filename);
         }  catch (std::exception& e) {
-            throw std::invalid_argument("Error,wrong file!3");
+            throw std::invalid_argument("Error,wrong file!1");
         }
     }
 
@@ -77,7 +82,7 @@ public:
         try {
             parse(filename);
         }  catch (std::exception& e) {
-            throw std::invalid_argument("Error,wrong file!4");
+            throw e;
         }
     }
 

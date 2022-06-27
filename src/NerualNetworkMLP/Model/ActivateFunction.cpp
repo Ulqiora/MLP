@@ -4,7 +4,7 @@ namespace  s21{
 ActivateFunction::ActivateFunction(typeFunction type)
 {
     if(type==typeFunction::SIGMOIND){
-        _function=[](double x){return 1/(1+std::exp(-x));};
+        _function=[](double x){return 1.0/(1.0+std::exp(-x));};
         _derivative=[this](double x){return _function(x)*(1-_function(x));};
     }
 }
