@@ -22,36 +22,19 @@ private:
         return answer==(indexMax+1);
     }
     void forwardPropagation(Image& image){
-        setImageToInputNeurons(image);
+        _layers.front().setNeuronsWithPixels(image);
         for(unsigned int i=0;i<_hiddenLayers+1;++i){
             _layers[i+1].calcForForwardPropagation(_layers[i],_func);
         }
     }
 
-    void setImageToInputNeurons(Image& image){
-        for(int i=0;i<NUM_OF_PIXELS;i++){
-            _layers[0](i).getValue()=image(i);
-        }
-    }
-
-    void setErrorForOutputLayers(int answer){
-        for(int i=0;i<_layers.back().getNumOfNeurons();i++){
-            if(i==answer-1){
-                _layers.back()(i).getError() = (1.0-_layers.back()(i).getValue())*
-                        _func.useDerivative(_layers.back()(i).getValue());
-            } else {
-                _layers.back()(i).getError() = (-_layers.back()(i).getValue())*
-                        _func.useDerivative(_layers.back()(i).getValue());
-            }
-        }
-    }
-
-    void backPropagation(){
+    void backPropagation(int answer){
+        _layers.back().setErrorNeuronsWithAnswer(answer,_func);
         for(int i=_hiddenLayers;i>=0;--i){
             for(int j=0;j<_layers[i].getNumOfNeurons();++j){
                 double sum=0.0;
                 for(int k=0; k < _layers[i+1].getNumOfNeurons(); ++k){
-                    sum+=(_layers[i+1](k).getError()*_layers[i+1](k).getWeight(j));
+                    sum+=(_layers[i+1](k).getError()*_layers[i+1](k)(j));
                 }
                 _layers[i](j).getError()=sum;
                 _layers[i](j).getError()*=_func.useDerivative(_layers[i](j).getValue());
@@ -62,7 +45,7 @@ private:
         for(unsigned int i=1;i<=_hiddenLayers+1;i++){
             for(int j=0;j<_layers[i].getNumOfNeurons();j++){
                 for(int k=0;k<_layers[i](j).getNumOfWeights();++k){
-                    _layers[i](j).getWeight(k)-=(_layers[i-1](j).getValue()*_layers[i](j).getError());
+                    _layers[i](j)(k)-=(_layers[i-1](j).getValue()*_layers[i](j).getError());
                 }
             }
         }
@@ -89,8 +72,7 @@ public:
                 } else {
                     qDebug()<< j <<"   0";
                 }
-                setErrorForOutputLayers(date.getAnswer(i));
-                backPropagation();
+                backPropagation(date.getAnswer(i));
                 updateWeight();
             }
             double percent=static_cast<double>(accuracy)/date.getSize()*100.0;

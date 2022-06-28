@@ -18,7 +18,7 @@ public:
     Neuron(TypeLayer numOfWeights):_value(0),_weights(static_cast<int>(numOfWeights)){
         int numOfWeightsInt=static_cast<int>(numOfWeights);
         for(int i=0;i<numOfWeightsInt;++i){
-            _weights[i]=QRandomGenerator::global()->bounded(0,100)/100.0;
+            _weights[i]=QRandomGenerator::global()->bounded(-100,100)/100.0;
         }
     }
     int getNumOfWeights(){
@@ -27,7 +27,7 @@ public:
     double& getValue(){
         return _value;
     }
-    double& getWeight(int i){
+    double& operator()(int i){
         return _weights[i];
     }
     double& getError(){

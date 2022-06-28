@@ -1,5 +1,6 @@
 #pragma once
 #include "Neuron.h"
+#include "../Dataset.h"
 #include "../ActivateFunction.h"
 namespace s21
 {
@@ -22,9 +23,31 @@ public:
         for(int i=0;i<getNumOfNeurons();++i){
             double sum=0.0;
             for(int j=0;j<layer.getNumOfNeurons();++j){
-                sum+=(layer._neurons[j]->getValue()*_neurons[i]->getWeight(j));
+                sum+=((layer(j)).getValue()*(*_neurons[i])(j));
             }
             _neurons[i]->getValue()=_func.use(sum);
+        }
+    }
+
+    void setNeuronsWithPixels(Image& image){
+        if(_type!=TypeLayer::INPUT)
+            throw std::invalid_argument("Error layer, this layer is not input");
+        for(int i=0;i<getNumOfNeurons();++i){
+            _neurons[i]->getValue()=image(i);
+        }
+    }
+
+    void setErrorNeuronsWithAnswer(int answer,ActivateFunction func){
+        if(_type!=TypeLayer::OUTPUT)
+            throw std::invalid_argument("Error layer, this layer is not output");
+        for(int i=0;i<getNumOfNeurons();i++){
+            if(i==answer-1){
+                _neurons[i]->getError() = (1.0-_neurons[i]->getValue())*
+                        func.useDerivative(_neurons[i]->getValue());
+            } else {
+                _neurons[i]->getError() = (-_neurons[i]->getValue())*
+                        func.useDerivative(_neurons[i]->getValue());
+            }
         }
     }
 
