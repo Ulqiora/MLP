@@ -49,7 +49,7 @@ private:
             ss.clear();
             ss.str(currentLine);
             ss>>imageInfo;
-            _answers.push_back(imageInfo);
+            _answers.push_back(imageInfo-1);
             if(ss.peek()!=','){
                 qDebug()<<"Error,wrong file!1";
                 throw std::invalid_argument("Error,wrong file!1");
@@ -89,7 +89,7 @@ public:
     Image& getImage(int i){
         return _images[i];
     }
-    int& getAnswer(int i){
+    int getAnswer(int i){
         return _answers[i];
     }
 

@@ -10,13 +10,13 @@ enum class typeFunction{SIGMOIND=1};
 class ActivateFunction
 {
 private:
-    std::function<double(double)> _function;
-    std::function<double(double)> _derivative;
+    std::function<double(double&)> _function;
+    std::function<double(double&)> _derivative;
 public:
     explicit ActivateFunction(typeFunction type=typeFunction::SIGMOIND);
-    double use(double arg);
+    double use(double& arg);
     Matrix use(Matrix& arg);
-    double useDerivative(double arg);
+    double useDerivative(double& arg);
     Matrix useDerivative(Matrix& arg);
 };
 
