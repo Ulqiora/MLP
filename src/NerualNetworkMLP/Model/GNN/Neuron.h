@@ -7,35 +7,27 @@
 #include <QRandomGenerator>
 #include "vector"
 #include "../constantValues.h"
+#include "../ActivateFunction.h"
+
 namespace s21{
 class Neuron{
 private:
     double _value;
     double _error;
     std::vector<double> _weights;
-
+    ActivateFunction _func;
 public:
-    Neuron(TypeLayer numOfWeights):_value(0),_weights(static_cast<int>(numOfWeights)){
-        for(auto& i:_weights){
-            i=QRandomGenerator::global()->bounded(0,100)/100.0;
-        }
-    }
-
-    int getNumOfWeights(){
-        return _weights.size();
-    }
-
-    double& getValue(){
-        return _value;
-    }
-
-    double& operator()(int i) {
-        return _weights[i];
-    }
-
-    double& getError(){
-        return _error;
-    }
+    explicit Neuron(TypeLayer numOfWeights,typeFunction type=typeFunction::SIGMOIND);
+    void forwardPropagation(const std::vector<Neuron>& inputNeurons);
+    void backPropagation(const std::vector<Neuron>& inputNeurons);
+    void backPropagation(int answer);
+    int getNumOfWeights();
+    double value()const;
+    void setValue(double other);
+    double error()const;
+    void setError(double other);
+    double weight(int i)const;
+    void setWeight(double other,int i);
 };
 
 }    //    namespace s21

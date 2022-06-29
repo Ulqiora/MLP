@@ -14,23 +14,30 @@ class Image{
 public:
     Image()=default;
     Image(std::stringstream& imageString){
+        double pixel=0.0;
         for(int i=0;i<NUM_OF_PIXELS;++i){
-            imageString>>_pixels[i];
-            _pixels[i]=_pixels[i]/255.0;
+            imageString>>pixel;
+            _pixels[i]=pixel/255.0;
             if(imageString.peek()==',' && i!=NUM_OF_PIXELS-1){
                 imageString.ignore();
             }else if(!(imageString.eof() || imageString.peek()=='\r')){
-                qDebug()<<"|"<<imageString.peek()<<"|";
                 throw std::invalid_argument("Error, wrong file format");
             }
         }
     }
 
-    double& operator()(int i){
+    double pixel(int i)const{
         return _pixels[i];
     }
+    std::array<double,NUM_OF_PIXELS>::const_iterator cbegin()const{
+        return _pixels.cbegin();
+    }
+
+    std::array<double,NUM_OF_PIXELS>::const_iterator cend()const{
+        return _pixels.cend();
+    }
 private:
-    double _pixels[NUM_OF_PIXELS];
+    std::array<double,NUM_OF_PIXELS> _pixels;
 };
 
 class Dataset
@@ -68,7 +75,7 @@ private:
     std::vector<int> _answers;
 public:
     Dataset():_images(0),_answers(0){}
-    explicit Dataset(std::string& filename):_images(0),_answers(0){
+    explicit Dataset(std::string& filename):Dataset(){
         try {
             parse(filename);
         }  catch (std::exception& e) {
@@ -86,14 +93,14 @@ public:
         }
     }
 
-    Image& getImage(int i){
+    const Image& getImage(int i)const {
         return _images[i];
     }
-    int getAnswer(int i){
+    int getAnswer(int i)const {
         return _answers[i];
     }
 
-    int getSize(){
+    int getSize()const{
         return _answers.size();
     }
 };

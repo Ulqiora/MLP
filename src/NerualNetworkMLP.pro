@@ -14,6 +14,9 @@ SOURCES += \
 #    ../src/NerualNetworkMLP/Model/Neuron.cpp \
 #    ../src/NerualNetworkMLP/CustomWidget/qpainter.cpp \
 #    ../src/NerualNetworkMLP/Model/INerualNetwork.cpp \
+    ../src/NerualNetworkMLP/Model/GNN/GNN.cpp \
+    ../src/NerualNetworkMLP/Model/GNN/Neuron.cpp \
+    ../src/NerualNetworkMLP/Model/GNN/Layer.cpp \
     ../src/NerualNetworkMLP/Model/Matrix.cpp \
     ../src/NerualNetworkMLP/Model/ActivateFunction.cpp
 
