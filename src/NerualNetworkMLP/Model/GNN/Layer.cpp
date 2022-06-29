@@ -25,6 +25,7 @@ int Layer::getIndexOfMaxValueNeuron()
     int numOfNeurons=_neurons.size();
     int indexMax=0;
     for(int i=0;i<numOfNeurons;i++){
+        qDebug()<<i<<"    "<<_neurons[i].value();
         if(_neurons[i].value()>_neurons[indexMax].value()){
             indexMax=i;
         }
@@ -45,15 +46,15 @@ void Layer::calcForBackPropagation(Layer& layerPrev) {
         for (const auto& neuron:layerPrev) {
             sum += (neuron.error() * neuron.weight(i));
         }
-        _neurons[i].setError(sum);
+        _neurons[i].setError(sum*_neurons[i].value());
     }
 }
 
 void Layer::calcForBackPropagation(int answer) {
     if (_type != TypeLayer::OUTPUT)throw std::invalid_argument("Error layer, this layer is not output");
     int i=0;
-    for (auto& neuron: _neurons) {
-        neuron.backPropagation(i==answer);
+    for (auto neuron=_neurons.begin();neuron!=_neurons.end();neuron++) {
+        neuron->backPropagation(i==answer);
         ++i;
     }
 }

@@ -4,10 +4,11 @@ namespace  s21{
 ActivateFunction::ActivateFunction(typeFunction type)
 {
     if(type==typeFunction::SIGMOIND){
-        _function=[](double x){return 1.0/(1.0+std::exp(-x));};
-        _derivative=[this](double x){return _function(x)*(1-_function(x));};
+        _function=[](double x){return (1.0/(1.0+std::exp(-x)));};
+        _derivative=[](double x){return (1.0/(1.0+std::exp(-x)))*(1-(1.0/(1.0+std::exp(-x))));};
     }
 }
+
 double ActivateFunction::use(double arg){
     return _function(arg);
 }
@@ -24,7 +25,8 @@ Matrix ActivateFunction::use(Matrix& arg){
 }
 
 double ActivateFunction::useDerivative(double arg){
-    return use(arg)*(1.0-use(arg));
+    double res=_derivative(arg);
+    return res;
 }
 
 Matrix ActivateFunction::useDerivative(Matrix& arg){

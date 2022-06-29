@@ -35,7 +35,7 @@ double Neuron::error() const { return _error; }
 
 void Neuron::setError(double sumError)
 {
-    _error=sumError*_func.useDerivative(_value);
+    _error=sumError;
 }
 double Neuron::weight(int i)const{
     return  _weights[i];
