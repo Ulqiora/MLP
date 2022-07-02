@@ -16,7 +16,7 @@ private:
     void updateWeight();
 public:
     GraphNerualNetwork(unsigned int numHiddenLayers);
-    void train(Dataset& date,int epoch);
+    void train(Dataset& date,Dataset&  dateTest,int epoch);
     void test(Dataset& date);
     Layer& getLayer(int i);
     std::vector<double>& getAccuracyHistory();

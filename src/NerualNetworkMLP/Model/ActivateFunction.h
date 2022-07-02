@@ -1,7 +1,7 @@
 #ifndef ACTICATEFUNCTION_H
 #define ACTICATEFUNCTION_H
 #include <functional>
-#include <math.h>
+#include <cmath>
 #include "Matrix.h"
 namespace s21{
 

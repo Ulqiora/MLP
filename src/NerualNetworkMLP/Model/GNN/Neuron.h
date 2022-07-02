@@ -14,11 +14,13 @@ class Neuron{
 private:
     double _value;
     double _error;
+    double _bios;
     std::vector<double> _weights;
-    ActivateFunction _func;
 public:
+    ActivateFunction _func;
     explicit Neuron(TypeLayer numOfWeights,typeFunction type=typeFunction::SIGMOIND);
     void forwardPropagation(const std::vector<Neuron>& inputNeurons);
+    void forwardPropagation(int i=0);
     void backPropagation(const std::vector<Neuron>& inputNeurons);
     void backPropagation(int answer);
     int getNumOfWeights();
@@ -26,8 +28,10 @@ public:
     void setValue(double other);
     double error()const;
     void setError(double other);
+    double bios();
+    void addToBios(double other);
     double weight(int i)const;
-    void setWeight(double other,int i);
+    void addToWeight(double other,int i);
 };
 
 }    //    namespace s21

@@ -8,25 +8,27 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     std::string str=QFileDialog::getOpenFileName().toStdString();
 //    std::string str1=QFileDialog::getOpenFileName().toStdString();
-    s21::Dataset date/*,dateTest*/;
+    s21::Dataset date,dateTest;
     try {
         date.setDate(str);
     }  catch (std::exception& e) {
         qDebug()<<e.what();
     }
+//    std::vector<int> answers(26);
+//    for(int i=0;i<date.getSize();++i){
+//        answers[date.getAnswer(i)]++;
+//    }
 //    try {
-//        dateTest.setDate(str1);
+//        dateTest.setDate(str);
 //    }  catch (std::exception& e) {
 //        qDebug()<<e.what();
 //    }
     s21::GraphNerualNetwork gnn(2);
     qDebug()<<"train start";
     auto begin = std::chrono::steady_clock::now();
-    gnn.train(date,1);
+    gnn.train(date,date,20);
     auto end = std::chrono::steady_clock::now();
-    auto elapsed_ms = std::chrono::duration_cast<std::chrono::minutes>(end - begin);
-    qDebug() << "The time: " << elapsed_ms.count() << " ms\n";
-//    qDebug()<<"test start";
-//    gnn.test(dateTest);
+    auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
+    qDebug() << "All time: " << elapsed_ms.count() << " s\n";
     return a.exec();
 }

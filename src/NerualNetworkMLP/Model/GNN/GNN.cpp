@@ -11,7 +11,6 @@ void GraphNerualNetwork::forwardPropagation(const Image& image) {
         _layers[i].calcForForwardPropagation(_layers[i-1]);
     }
 }
-
 void GraphNerualNetwork::backPropagation(int answer) {
     _layers.back().calcForBackPropagation(answer);
     for(unsigned int i=_numOfHiddenLayers;i>0;--i){
@@ -34,38 +33,33 @@ GraphNerualNetwork::GraphNerualNetwork(unsigned int numHiddenLayers) : _numOfHid
     _layers.push_back(Layer(TypeLayer::OUTPUT, TypeLayer::HIDDEN));
 }
 
-void GraphNerualNetwork::train(Dataset& date, int epoch) {
-    _accuracyHistory.clear();
+void GraphNerualNetwork::train(Dataset& date,Dataset&  dateTest, int epoch) {
     for (int i = 0; i < epoch; i++) {
-        int accuracy = 0, dataSize = date.getSize();
+        qDebug() <<i <<"epoch";
+        auto begin = std::chrono::steady_clock::now();
+        int dataSize = date.getSize();
         for (int j = 0; j < dataSize; ++j) {
             forwardPropagation(date.getImage(j));
-            if (isCorrectPrediction(date.getAnswer(j))) {
-                                    qDebug()<<j<<":  1";
-                ++accuracy;
-            } else {
-                                    qDebug()<<j<<":  0";
-            }
             backPropagation(date.getAnswer(j));
             updateWeight();
+//            qDebug() << "weight" << _layers[3].begin()->weight(0);
+//            qDebug() << "error" << _layers[3].begin()->error();
         }
-        double percent = static_cast<double>(accuracy) / date.getSize() * 100.0;
-        _accuracyHistory.push_back(percent);
-        qDebug() << i + 1 << "     " << accuracy;
+        auto end = std::chrono::steady_clock::now();
+        auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
+        qDebug() <<"Train runtime=" << elapsed_ms.count() << " s\n";
+        test(dateTest);
+        auto end2 = std::chrono::steady_clock::now();
+        auto elapsed_ms2 = std::chrono::duration_cast<std::chrono::seconds>(end2 - end);
+        qDebug() <<"Test runtime=" << elapsed_ms2.count() << " s\n";
     }
-    qDebug() << getAccuracyHistory();
 }
 
 void GraphNerualNetwork::test(Dataset& date) {
     int accuracy = 0;
     for (int j = 0; j < date.getSize(); ++j) {
         forwardPropagation(date.getImage(j));
-        if (isCorrectPrediction(date.getAnswer(j))) {
-            ++accuracy;
-            //                    qDebug()<< j <<"   1";
-        } else {
-            //                    qDebug()<< j <<"   0";
-        }
+        accuracy+=isCorrectPrediction(date.getAnswer(j));
     }
     double percent = static_cast<double>(accuracy) / date.getSize() * 100.0;
     qDebug() << "test: accuracy=" << percent;

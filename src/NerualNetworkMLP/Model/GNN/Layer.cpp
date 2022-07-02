@@ -1,6 +1,5 @@
 #include "Layer.h"
-#include <thread>
-#include <memory>
+
 
 namespace s21 {
 Layer::Layer(TypeLayer thisLayer, TypeLayer previousLayer) :_type(thisLayer) {
@@ -14,7 +13,7 @@ void Layer::setNeuronsByImagePixels(const Image& image){
     if(_type!=TypeLayer::INPUT)
         throw std::invalid_argument("Error, It is not input layer");
     auto imageIterator=image.cbegin();
-    for(Neuron neuron:_neurons){
+    for(auto& neuron:_neurons){
         neuron.setValue(*imageIterator);
         ++imageIterator;
     }
@@ -25,7 +24,7 @@ int Layer::getIndexOfMaxValueNeuron()
     int numOfNeurons=_neurons.size();
     int indexMax=0;
     for(int i=0;i<numOfNeurons;i++){
-        qDebug()<<i<<"    "<<_neurons[i].value();
+//        qDebug()<<i<<"    "<<_neurons[i].value();
         if(_neurons[i].value()>_neurons[indexMax].value()){
             indexMax=i;
         }
@@ -34,9 +33,20 @@ int Layer::getIndexOfMaxValueNeuron()
 }
 
 void Layer::calcForForwardPropagation(Layer& layerPrev) {
-    for(auto& neuron:_neurons){
+//    std::function<void(Neuron&)> ForwardFeed = [this,&layerPrev](Neuron& neuron) {
+//        neuron.forwardPropagation(layerPrev._neurons);
+//    };
+
+//    std::vector<std::unique_ptr<std::thread>> threads;
+
+    for (Neuron& neuron : _neurons) {
         neuron.forwardPropagation(layerPrev._neurons);
+//        threads.push_back(std::unique_ptr<std::thread>(new std::thread(ForwardFeed, std::ref(neuron))));
     }
+
+//    for(auto& thread : threads) {
+//        thread->join();
+    //    }
 }
 
 void Layer::calcForBackPropagation(Layer& layerPrev) {
@@ -46,27 +56,33 @@ void Layer::calcForBackPropagation(Layer& layerPrev) {
         for (const auto& neuron:layerPrev) {
             sum += (neuron.error() * neuron.weight(i));
         }
-        _neurons[i].setError(sum*_neurons[i].value());
+        _neurons[i].setError(sum);
     }
 }
 
-void Layer::calcForBackPropagation(int answer) {
+void Layer::calcForBackPropagation(const int answer) {
     if (_type != TypeLayer::OUTPUT)throw std::invalid_argument("Error layer, this layer is not output");
     int i=0;
-    for (auto neuron=_neurons.begin();neuron!=_neurons.end();neuron++) {
+//    double Error=0.0;
+    for (auto neuron=_neurons.begin();neuron!=_neurons.end();++neuron) {
         neuron->backPropagation(i==answer);
         ++i;
+//        Error+=((neuron->value()-(i==answer))*(neuron->value()-(i==answer)));
     }
+
+//    Error/=_neurons.size();
+//    qDebug()<<"error= "<<Error;
 }
+
 
 void Layer::updateWeightNeurons(Layer& layerPrev) {
     for (auto& neuron:_neurons) {
         int j=0;
         for (auto& neuronPrevLayer:layerPrev) {
-            int temp = neuronPrevLayer.value() * neuron.error();
-            neuron.setWeight(temp+neuron.value(),j);
+            neuron.addToWeight(-neuronPrevLayer.value()*neuron.error()*0.25,j);
             ++j;
         }
+        neuron.addToBios(-neuron.error()*0.25);
     }
 }
 

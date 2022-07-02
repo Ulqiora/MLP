@@ -18,11 +18,11 @@ public:
         for(int i=0;i<NUM_OF_PIXELS;++i){
             imageString>>pixel;
             _pixels[i]=pixel/255.0;
-            if(imageString.peek()==',' && i!=NUM_OF_PIXELS-1){
+//            if(imageString.peek()==',' && i!=NUM_OF_PIXELS-1){
                 imageString.ignore();
-            }else if(!(imageString.eof() || imageString.peek()=='\r')){
-                throw std::invalid_argument("Error, wrong file format");
-            }
+//            }else if(!(imageString.eof() || imageString.peek()=='\r')){
+//                throw std::invalid_argument("Error, wrong file format");
+//            }
         }
     }
 
@@ -57,10 +57,10 @@ private:
             ss.str(currentLine);
             ss>>imageInfo;
             _answers.push_back(imageInfo-1);
-            if(ss.peek()!=','){
-                qDebug()<<"Error,wrong file!1";
-                throw std::invalid_argument("Error,wrong file!1");
-            }
+//            if(ss.peek()!=','){
+//                qDebug()<<"Error,wrong file!1";
+//                throw std::invalid_argument("Error,wrong file!1");
+//            }
             ss.ignore();
             try {
                 _images.push_back(Image(ss));

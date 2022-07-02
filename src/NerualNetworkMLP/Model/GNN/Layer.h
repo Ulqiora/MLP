@@ -1,4 +1,6 @@
 #pragma once
+#include <thread>
+#include <memory>
 #include "Neuron.h"
 #include "../Dataset.h"
 #include "../ActivateFunction.h"
@@ -15,15 +17,16 @@ public:
     int getIndexOfMaxValueNeuron();
 
     void calcForForwardPropagation(Layer& layer);
-
     void calcForBackPropagation(Layer& layerPrev);
-    void calcForBackPropagation(int answer);
+    void calcForBackPropagation(const int answer);
 
     void updateWeightNeurons(Layer& layerPrev);
     int getNumOfNeurons();
     Neuron operator ()(int i)const;
     std::vector<Neuron>::iterator begin();
     std::vector<Neuron>::iterator end();
+    std::vector<Neuron>::const_iterator cbegin();
+    std::vector<Neuron>::const_iterator cend();
 };
 
 
