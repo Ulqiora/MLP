@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 #include <QRandomGenerator>
-#include "vector"
+#include <vector>
 #include "../constantValues.h"
 #include "../ActivateFunction.h"
 

@@ -34,6 +34,7 @@ int Layer::getIndexOfMaxValueNeuron()
 
 void Layer::calcForForwardPropagation(Layer& layerPrev) {
     for (Neuron& neuron : _neurons) {
+
         neuron.forwardPropagation(layerPrev._neurons);
     }
 }
@@ -66,10 +67,10 @@ void Layer::updateWeightNeurons(Layer& layerPrev) {
     for (auto& neuron:_neurons) {
         int j=0;
         for (auto& neuronPrevLayer:layerPrev) {
-            neuron.calcToEditWeight(j,0.02,neuronPrevLayer.value());
+            neuron.calcToEditWeight(j,0.002,neuronPrevLayer.value());
             ++j;
         }
-        neuron.calcToEditBias(0.02);
+        neuron.calcToEditBias(0.002);
     }
 }
 

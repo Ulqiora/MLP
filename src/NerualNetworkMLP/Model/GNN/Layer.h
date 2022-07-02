@@ -1,6 +1,6 @@
 #pragma once
-#include <thread>
 #include <memory>
+//#include <omp.h>
 #include "Neuron.h"
 #include "../Dataset.h"
 #include "../ActivateFunction.h"
