@@ -13,8 +13,9 @@ namespace s21{
 class Neuron{
 private:
     double _value;
+    double _sum;
     double _error;
-    double _bios;
+    double _bias;
     std::vector<double> _weights;
 public:
     ActivateFunction _func;
@@ -26,12 +27,13 @@ public:
     int getNumOfWeights();
     double value()const;
     void setValue(double other);
+    double sum()const;
     double error()const;
     void setError(double other);
     double bios();
-    void addToBios(double other);
+    void calcToEditBias(double lr);
     double weight(int i)const;
-    void addToWeight(double other,int i);
+    void calcToEditWeight(double index,double lr,double valueNeuronOfPrevLayer);
 };
 
 }    //    namespace s21

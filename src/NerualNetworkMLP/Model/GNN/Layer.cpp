@@ -33,20 +33,9 @@ int Layer::getIndexOfMaxValueNeuron()
 }
 
 void Layer::calcForForwardPropagation(Layer& layerPrev) {
-//    std::function<void(Neuron&)> ForwardFeed = [this,&layerPrev](Neuron& neuron) {
-//        neuron.forwardPropagation(layerPrev._neurons);
-//    };
-
-//    std::vector<std::unique_ptr<std::thread>> threads;
-
     for (Neuron& neuron : _neurons) {
         neuron.forwardPropagation(layerPrev._neurons);
-//        threads.push_back(std::unique_ptr<std::thread>(new std::thread(ForwardFeed, std::ref(neuron))));
     }
-
-//    for(auto& thread : threads) {
-//        thread->join();
-    //    }
 }
 
 void Layer::calcForBackPropagation(Layer& layerPrev) {
@@ -63,15 +52,13 @@ void Layer::calcForBackPropagation(Layer& layerPrev) {
 void Layer::calcForBackPropagation(const int answer) {
     if (_type != TypeLayer::OUTPUT)throw std::invalid_argument("Error layer, this layer is not output");
     int i=0;
-//    double Error=0.0;
+//    double error=0.0;
     for (auto neuron=_neurons.begin();neuron!=_neurons.end();++neuron) {
         neuron->backPropagation(i==answer);
+//        error+=neuron->error()*neuron->error();
         ++i;
-//        Error+=((neuron->value()-(i==answer))*(neuron->value()-(i==answer)));
     }
-
-//    Error/=_neurons.size();
-//    qDebug()<<"error= "<<Error;
+//    qDebug()<<"Error = "<<error/26.0;
 }
 
 
@@ -79,10 +66,10 @@ void Layer::updateWeightNeurons(Layer& layerPrev) {
     for (auto& neuron:_neurons) {
         int j=0;
         for (auto& neuronPrevLayer:layerPrev) {
-            neuron.addToWeight(-neuronPrevLayer.value()*neuron.error()*0.25,j);
+            neuron.calcToEditWeight(j,0.02,neuronPrevLayer.value());
             ++j;
         }
-        neuron.addToBios(-neuron.error()*0.25);
+        neuron.calcToEditBias(0.02);
     }
 }
 

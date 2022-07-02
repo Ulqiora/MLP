@@ -35,13 +35,16 @@ GraphNerualNetwork::GraphNerualNetwork(unsigned int numHiddenLayers) : _numOfHid
 
 void GraphNerualNetwork::train(Dataset& date,Dataset&  dateTest, int epoch) {
     for (int i = 0; i < epoch; i++) {
-        qDebug() <<i <<"epoch";
+        qDebug() << i + 1 <<"epoch";
         auto begin = std::chrono::steady_clock::now();
         int dataSize = date.getSize();
         for (int j = 0; j < dataSize; ++j) {
             forwardPropagation(date.getImage(j));
+//            qDebug() <<"forwardPropagation-yes";
             backPropagation(date.getAnswer(j));
+//            qDebug() <<"backPropagation-yes";
             updateWeight();
+//            qDebug() <<"updateWeight-yes";
 //            qDebug() << "weight" << _layers[3].begin()->weight(0);
 //            qDebug() << "error" << _layers[3].begin()->error();
         }
@@ -62,10 +65,8 @@ void GraphNerualNetwork::test(Dataset& date) {
         accuracy+=isCorrectPrediction(date.getAnswer(j));
     }
     double percent = static_cast<double>(accuracy) / date.getSize() * 100.0;
-    qDebug() << "test: accuracy=" << percent;
+    qDebug() << "test: percent  =" << percent;
+    qDebug() << "      accuracy =" << accuracy;
 }
 
-Layer& GraphNerualNetwork::getLayer(int i) { return _layers[i]; }
-
-std::vector<double>& GraphNerualNetwork::getAccuracyHistory() { return _accuracyHistory; }
 }  // namespace s21

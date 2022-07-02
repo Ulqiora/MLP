@@ -14,11 +14,10 @@ private:
     void forwardPropagation(const Image& image);
     void backPropagation(int answer);
     void updateWeight();
+    void test(Dataset& date);
 public:
     GraphNerualNetwork(unsigned int numHiddenLayers);
     void train(Dataset& date,Dataset&  dateTest,int epoch);
-    void test(Dataset& date);
-    Layer& getLayer(int i);
-    std::vector<double>& getAccuracyHistory();
+
 };
 } // namespace s21

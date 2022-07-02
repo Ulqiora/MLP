@@ -3,33 +3,38 @@
 namespace s21 {
 Neuron::Neuron(TypeLayer numOfWeights,typeFunction type) : _value(0), _weights(static_cast<int>(numOfWeights)),_func(type) {
     for (auto& i : _weights) {
-        i = /*QRandomGenerator::global()->bounded(-50, 50) / 100.0*/0.5;
+        i = QRandomGenerator::global()->bounded(-100, 100) / 100.0;
     }
 }
 
 void Neuron::forwardPropagation(const std::vector<Neuron> &inputNeurons)
 {
-    double sum=_bios;
+    _sum=_bias;
     auto weightIterator=_weights.cbegin();
     for(const auto& neuron:inputNeurons){
-        sum+=neuron._value*(*weightIterator);
+        _sum+=neuron._value*(*weightIterator);
         ++weightIterator;
     }
-    _value=_func.use(sum);
+    _value=_func.use(_sum);
 }
 
 void Neuron::backPropagation(int answer)
 {
-    _error=2*(answer-_value)*_func.useDerivative(_value);
+    _error=(_value-answer);
+
 }
 
 int Neuron::getNumOfWeights() { return _weights.size(); }
 
 double Neuron::value() const { return _value; }
 
-void Neuron::setValue(double other)
+void Neuron::setValue(double value)
 {
-    _value=other;
+    _value=value;
+}
+
+double Neuron::sum()const {
+    return _sum;
 }
 
 double Neuron::error() const { return _error; }
@@ -40,17 +45,17 @@ void Neuron::setError(double sumError)
 }
 
 double Neuron::bios(){
-    return _bios;
+    return _bias;
 }
-void Neuron::addToBios(double other){
-    _bios+=other;
+void Neuron::calcToEditBias(double lr){
+    _bias-=_error*_func.useDerivative(_value)*lr;
 }
 
 double Neuron::weight(int i)const{
     return _weights[i];
 }
-void Neuron::addToWeight(double other,int i){
-    _weights[i]+=other;
+void Neuron::calcToEditWeight(double index,double lr,double valueNeuronOfPrevLayer){
+    _weights[index]-=lr*valueNeuronOfPrevLayer*_func.useDerivative(_value)*_error;
 }
 
 }  // namespace s21

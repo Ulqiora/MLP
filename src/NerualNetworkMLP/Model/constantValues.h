@@ -1,3 +1,3 @@
 #pragma once
-enum class TypeLayer{INPUT=1,HIDDEN=1,OUTPUT=1,NA=0};
-enum {NUM_OF_PIXELS=1};
+enum {NUM_OF_PIXELS=784};
+enum class TypeLayer{INPUT=NUM_OF_PIXELS,HIDDEN=64,OUTPUT=26,NA=0};

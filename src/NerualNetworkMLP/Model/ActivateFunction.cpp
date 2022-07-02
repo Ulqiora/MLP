@@ -5,7 +5,7 @@ ActivateFunction::ActivateFunction(typeFunction type)
 {
     if(type==typeFunction::SIGMOIND){
         _function=[](double x){return (1/(1+std::exp(-x)));};
-        _derivative=[](double x){return (x*(1-x));};
+        _derivative=[](double x){return (x)*(1-x);};
     }
 }
 
