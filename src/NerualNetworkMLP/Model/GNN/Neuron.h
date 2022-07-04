@@ -34,6 +34,22 @@ public:
     void calcToEditBias(double lr);
     double weight(int i)const;
     void calcToEditWeight(double index,double lr,double valueNeuronOfPrevLayer);
+    void printNeuron(std::ofstream& file){
+        file<< _bias << ' ';
+        for(auto& weight:_weights){
+            file<<weight<<' ';
+        }
+        file<<'\n';
+    }
+    void loadWeights(std::ifstream& file){
+        file>>_bias;
+        if (file.peek()==' ')file.ignore();
+        for(auto& weight:_weights){
+            file>>weight;
+            if(file.peek()==' ') file.ignore();
+        }
+        file.ignore();
+    }
 };
 
 }    //    namespace s21

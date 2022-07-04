@@ -33,8 +33,8 @@ int Layer::getIndexOfMaxValueNeuron()
 }
 
 void Layer::calcForForwardPropagation(Layer& layerPrev) {
+    #pragma omp for
     for (Neuron& neuron : _neurons) {
-
         neuron.forwardPropagation(layerPrev._neurons);
     }
 }
@@ -43,7 +43,7 @@ void Layer::calcForBackPropagation(Layer& layerPrev) {
     int numOfNeurons=getNumOfNeurons();
     for (int i = 0; i < numOfNeurons; i++) {
         double sum = 0.0;
-        for (const auto& neuron:layerPrev) {
+        for (const auto& neuron:layerPrev._neurons) {
             sum += (neuron.error() * neuron.weight(i));
         }
         _neurons[i].setError(sum);
@@ -63,20 +63,16 @@ void Layer::calcForBackPropagation(const int answer) {
 }
 
 
-void Layer::updateWeightNeurons(Layer& layerPrev) {
+void Layer::updateWeightNeurons(Layer& layerPrev,double lr) {
     for (auto& neuron:_neurons) {
         int j=0;
-        for (auto& neuronPrevLayer:layerPrev) {
-            neuron.calcToEditWeight(j,0.002,neuronPrevLayer.value());
+        for (auto& neuronPrevLayer:layerPrev._neurons) {
+            neuron.calcToEditWeight(j,lr,neuronPrevLayer.value());
             ++j;
         }
-        neuron.calcToEditBias(0.002);
+        neuron.calcToEditBias(lr);
     }
 }
 
 int Layer::getNumOfNeurons() { return _neurons.size(); }
-
-std::vector<Neuron>::iterator Layer::begin() { return _neurons.begin(); }
-
-std::vector<Neuron>::iterator Layer::end() { return _neurons.end(); }
 };  // namespace s21

@@ -15,18 +15,22 @@ public:
     Layer(TypeLayer thisLayer, TypeLayer previousLayer);
     void setNeuronsByImagePixels(const Image& image);
     int getIndexOfMaxValueNeuron();
-
     void calcForForwardPropagation(Layer& layer);
     void calcForBackPropagation(Layer& layerPrev);
     void calcForBackPropagation(const int answer);
-
-    void updateWeightNeurons(Layer& layerPrev);
+    void updateWeightNeurons(Layer& layerPrev,double lr);
     int getNumOfNeurons();
     Neuron operator ()(int i)const;
-    std::vector<Neuron>::iterator begin();
-    std::vector<Neuron>::iterator end();
-    std::vector<Neuron>::const_iterator cbegin();
-    std::vector<Neuron>::const_iterator cend();
+    void printLayer(std::ofstream& file){
+        for(auto& neuron:_neurons){
+            neuron.printNeuron(file);
+        }
+    }
+    void loadWeights(std::ifstream& file){
+        for(auto& neuron:_neurons){
+            neuron.loadWeights(file);
+        }
+    }
 };
 
 

@@ -2,8 +2,8 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-#QMAKE_CXXFLAGS += -fopenmp
-#LIBS += -fopenmp
+QMAKE_CXXFLAGS += -fopenmp
+LIBS += -fopenmp
 
 CONFIG += c++17
 

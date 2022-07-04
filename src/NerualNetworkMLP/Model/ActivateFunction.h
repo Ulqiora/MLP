@@ -5,7 +5,7 @@
 #include "Matrix.h"
 namespace s21{
 
-enum class typeFunction{SIGMOIND=1};
+enum class typeFunction{SIGMOIND=0};
 
 class ActivateFunction
 {
