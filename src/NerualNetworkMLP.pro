@@ -2,8 +2,8 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-QMAKE_CXXFLAGS += -fopenmp
-LIBS += -fopenmp
+QMAKE_CXXFLAGS += -v
+#LIBS += -fopenmp
 
 CONFIG += c++17
 
@@ -13,32 +13,28 @@ CONFIG += c++17
 
 SOURCES += \
     ../src/NerualNetworkMLP/main.cpp \
-#    ../src/NerualNetworkMLP/View/viewapplication.cpp \
-#    ../src/NerualNetworkMLP/Model/Neuron.cpp \
 #    ../src/NerualNetworkMLP/CustomWidget/qpainter.cpp \
-#    ../src/NerualNetworkMLP/Model/INerualNetwork.cpp \
     ../src/NerualNetworkMLP/Model/GNN/GNN.cpp \
     ../src/NerualNetworkMLP/Model/GNN/Neuron.cpp \
     ../src/NerualNetworkMLP/Model/GNN/Layer.cpp \
     ../src/NerualNetworkMLP/Model/Matrix.cpp \
-    ../src/NerualNetworkMLP/Model/ActivateFunction.cpp
+    ../src/NerualNetworkMLP/Model/ActivateFunction.cpp \
+    ../src/NerualNetworkMLP/View/viewapplication.cpp
 
 HEADERS += \
-#    ../src/NerualNetworkMLP/View/viewapplication.h\
-#    ../src/NerualNetworkMLP/Model/Neuron.h \
 #    ../src/NerualNetworkMLP/CustomWidget/qpainter.h \
     ../src/NerualNetworkMLP/Model/ActivateFunction.h \
-#    ../src/NerualNetworkMLP/Model/INerualNetwork.h \
     ../src/NerualNetworkMLP/Model/Matrix.h \
     ../src/NerualNetworkMLP/Model/Dataset.h \
     ../src/NerualNetworkMLP/Model/GNN/GNN.h \
     ../src/NerualNetworkMLP/Model/GNN/Neuron.h \
     ../src/NerualNetworkMLP/Model/constantValues.h \
-    ../src/NerualNetworkMLP/Model/GNN/Layer.h
+    ../src/NerualNetworkMLP/Model/GNN/Layer.h \
+    ../src/NerualNetworkMLP/View/viewapplication.h
 
-#FORMS += \
-#    ../src/NerualNetworkMLP/UiFiles/viewapplication.ui
+FORMS += \
+    ../src/NerualNetworkMLP/View/viewapplication.ui
 
 
-#RESOURCES += \
-#    ../src/NerualNetworkMLP/Resources/resources.qrc
+RESOURCES += \
+    ../src/NerualNetworkMLP/Resources/resources.qrc

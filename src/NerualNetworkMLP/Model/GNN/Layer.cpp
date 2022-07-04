@@ -33,7 +33,6 @@ int Layer::getIndexOfMaxValueNeuron()
 }
 
 void Layer::calcForForwardPropagation(Layer& layerPrev) {
-    #pragma omp for
     for (Neuron& neuron : _neurons) {
         neuron.forwardPropagation(layerPrev._neurons);
     }

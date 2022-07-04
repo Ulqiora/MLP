@@ -3,19 +3,20 @@
 
 #include <QMainWindow>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class ViewApplication; }
-QT_END_NAMESPACE
+namespace Ui {
+class ViewApplication;
+}
 
 class ViewApplication : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    ViewApplication(QWidget *parent = nullptr);
+    explicit ViewApplication(QWidget *parent = nullptr);
     ~ViewApplication();
 
 private:
     Ui::ViewApplication *ui;
 };
+
 #endif // VIEWAPPLICATION_H
