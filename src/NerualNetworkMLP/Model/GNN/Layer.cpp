@@ -9,6 +9,26 @@ Layer::Layer(TypeLayer thisLayer, TypeLayer previousLayer) :_type(thisLayer) {
     }
 }
 
+void Layer::calcSolutions(Metrics &metrics,int answer)
+{
+    if(_type!=TypeLayer::OUTPUT) throw std::invalid_argument("This layer is not output!");
+    for(int i=0;i<getNumOfNeurons();++i){
+        if(i==answer){
+            if(i==getIndexOfMaxValueNeuron()){
+                metrics.solutions.tp++;
+            } else {
+                metrics.solutions.fn++;
+            }
+        } else {
+            if(i==getIndexOfMaxValueNeuron()){
+                metrics.solutions.fp++;
+            } else {
+                metrics.solutions.tn++;
+            }
+        }
+    }
+}
+
 void Layer::setNeuronsByImagePixels(const Image& image){
     if(_type!=TypeLayer::INPUT)
         throw std::invalid_argument("Error, It is not input layer");
@@ -24,7 +44,6 @@ int Layer::getIndexOfMaxValueNeuron()
     int numOfNeurons=_neurons.size();
     int indexMax=0;
     for(int i=0;i<numOfNeurons;i++){
-//        qDebug()<<i<<"    "<<_neurons[i].value();
         if(_neurons[i].value()>_neurons[indexMax].value()){
             indexMax=i;
         }
@@ -52,13 +71,10 @@ void Layer::calcForBackPropagation(Layer& layerPrev) {
 void Layer::calcForBackPropagation(const int answer) {
     if (_type != TypeLayer::OUTPUT)throw std::invalid_argument("Error layer, this layer is not output");
     int i=0;
-//    double error=0.0;
     for (auto neuron=_neurons.begin();neuron!=_neurons.end();++neuron) {
         neuron->backPropagation(i==answer);
-//        error+=neuron->error()*neuron->error();
         ++i;
     }
-//    qDebug()<<"Error = "<<error/26.0;
 }
 
 

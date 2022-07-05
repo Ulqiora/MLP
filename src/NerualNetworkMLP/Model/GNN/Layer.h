@@ -1,9 +1,8 @@
 #pragma once
 #include <memory>
-//#include <omp.h>
 #include "Neuron.h"
 #include "../Dataset.h"
-#include "../ActivateFunction.h"
+#include "../Metrics.h"
 namespace s21
 {
 class Layer{
@@ -13,6 +12,7 @@ private:
 
 public:
     Layer(TypeLayer thisLayer, TypeLayer previousLayer);
+    void calcSolutions(Metrics& metrics,int answer);
     void setNeuronsByImagePixels(const Image& image);
     int getIndexOfMaxValueNeuron();
     void calcForForwardPropagation(Layer& layer);

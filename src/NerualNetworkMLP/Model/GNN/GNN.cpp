@@ -34,41 +34,33 @@ GraphNerualNetwork::GraphNerualNetwork(unsigned int numHiddenLayers) : _numOfHid
     _layers.push_back(Layer(TypeLayer::OUTPUT, TypeLayer::HIDDEN));
 }
 
-void GraphNerualNetwork::train(Dataset& date,Dataset&  dateTest, int epoch) {
+void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentTestData,int epoch) {
+    _accuracyHistory.clear();
     for (int i = 0; i < epoch; i++) {
-        qDebug() << i + 1 <<"epoch";
-        qDebug()<<"LR ="<<lr/epoch;
-        auto begin = std::chrono::steady_clock::now();
-        int dataSize = date.getSize();
+        int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
-            forwardPropagation(date.getImage(j));
-//            qDebug() <<"forwardPropagation-yes";
-            backPropagation(date.getAnswer(j));
-//            qDebug() <<"backPropagation-yes";
+            forwardPropagation(data.getImage(j));
+            backPropagation(data.getAnswer(j));
             updateWeight(i+1);
-//            qDebug() <<"updateWeight-yes";
-//            qDebug() << "weight" << _layers[3].begin()->weight(0);
-//            qDebug() << "error" << _layers[3].begin()->error();
         }
-        auto end = std::chrono::steady_clock::now();
-        auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
-        qDebug() <<"Train runtime=" << elapsed_ms.count() << " s\n";
-        test(dateTest);
-        auto end2 = std::chrono::steady_clock::now();
-        auto elapsed_ms2 = std::chrono::duration_cast<std::chrono::seconds>(end2 - end);
-        qDebug() <<"Test runtime=" << elapsed_ms2.count() << " s\n";
+        test(dataTest,percentTestData);
     }
 }
 
-void GraphNerualNetwork::test(Dataset& date) {
-    int accuracy = 0;
-    for (int j = 0; j < date.getSize(); ++j) {
+Metrics GraphNerualNetwork::test(Dataset& date, double percentTestData) {
+    Metrics metrics;
+    int accuracy=0;
+    int dataSize=date.getSize()*percentTestData;
+    for (int j = 0; j < dataSize; ++j) {
         forwardPropagation(date.getImage(j));
         accuracy+=isCorrectPrediction(date.getAnswer(j));
+        _layers.back().calcSolutions(metrics,date.getAnswer(j));
     }
-    double percent = static_cast<double>(accuracy) / date.getSize() * 100.0;
-    qDebug() << "test: percent  =" << percent;
-    qDebug() << "      accuracy =" << accuracy;
+    metrics.accuracy =static_cast<double>(accuracy) / date.getSize() * 100.0;
+    metrics.precision=metrics.solutions.tp/(metrics.solutions.tp+metrics.solutions.fp);
+    metrics.recall=metrics.solutions.tp/(metrics.solutions.tp+metrics.solutions.fn);
+    metrics.fMeasure=2*(metrics.precision*metrics.recall)/(metrics.precision*metrics.recall);
+    return metrics;
 }
 
 void GraphNerualNetwork::saveWeights(std::string filename){
@@ -94,6 +86,32 @@ void GraphNerualNetwork::loadWeights(std::string filename){
     if(file.peek()=='\n') file.ignore();
     for(unsigned int i=1;i<=_numOfHiddenLayers+1;++i){
         _layers[i].loadWeights(file);
+    }
+}
+
+void GraphNerualNetwork::crossValidate(Dataset& dataTrain,int k)
+{
+    _accuracyHistory.clear();
+    int sizeDataTrain=dataTrain.getSize();
+    int stepByFor=sizeDataTrain/k;
+    for(int i=0;i<k;++k){
+        int start=stepByFor*i;
+        int end=stepByFor*(i+1);
+        for(int indexForData=start;indexForData<end;++indexForData){
+            forwardPropagation(dataTrain.getImage(indexForData));
+            backPropagation(dataTrain.getAnswer(indexForData));
+            updateWeight(1);
+        }
+        int accuracy=0;
+        for(int indexForData=0;indexForData<start;++indexForData){
+            forwardPropagation(dataTrain.getImage(indexForData));
+            accuracy+=isCorrectPrediction(dataTrain.getAnswer(indexForData));
+        }
+        for(int indexForData=end;indexForData<sizeDataTrain;++indexForData){
+            forwardPropagation(dataTrain.getImage(indexForData));
+            accuracy+=isCorrectPrediction(dataTrain.getAnswer(indexForData));
+        }
+        _accuracyHistory.push_back(accuracy/(sizeDataTrain-stepByFor));
     }
 }
 

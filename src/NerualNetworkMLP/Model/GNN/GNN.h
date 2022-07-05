@@ -1,8 +1,6 @@
 #pragma once
 #include <ostream>
 #include "Layer.h"
-#include "../Dataset.h"
-#include "../ActivateFunction.h"
 namespace s21
 {
 class GraphNerualNetwork{
@@ -18,9 +16,11 @@ private:
     void updateWeight(int epoch);
 public:
     GraphNerualNetwork(unsigned int numHiddenLayers);
-    void train(Dataset& date,Dataset&  dateTest,int epoch);
-    void test(Dataset& date);
+    void train(Dataset& data,Dataset&  dataTest, double percentTestData,int numOfEpoch);
+    Metrics test(Dataset& data, double percentTestData);
     void saveWeights(std::string filename);
     void loadWeights(std::string filename);
+    void crossValidate(Dataset& dateTrain,int k);
+    void setLearningRate(double value);
 };
 } // namespace s21

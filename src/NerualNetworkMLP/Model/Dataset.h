@@ -71,6 +71,7 @@ private:
         }
         file.close();
     }
+
     std::vector<Image> _images;
     std::vector<int> _answers;
 public:
