@@ -10,23 +10,24 @@ CONFIG += c++17
 
 SOURCES += \
     ../src/NerualNetworkMLP/main.cpp \
-#    ../src/NerualNetworkMLP/CustomWidget/qpainter.cpp \
     ../src/NerualNetworkMLP/Model/GNN/GNN.cpp \
     ../src/NerualNetworkMLP/Model/GNN/Neuron.cpp \
     ../src/NerualNetworkMLP/Model/GNN/Layer.cpp \
-    ../src/NerualNetworkMLP/Model/Matrix.cpp \
-    ../src/NerualNetworkMLP/Model/ActivateFunction.cpp
+    ../src/NerualNetworkMLP/Model/MNN/Matrix.cpp \
+    ../src/NerualNetworkMLP/Model/ActivateFunction.cpp \
+    ../src/NerualNetworkMLP/Model/Dataset.cpp \
+    ../src/NerualNetworkMLP/Model/MNN/MNN.cpp
 
 HEADERS += \
-#    ../src/NerualNetworkMLP/CustomWidget/qpainter.h \
-    ../src/NerualNetworkMLP/Model/ActivateFunction.h \
-    ../src/NerualNetworkMLP/Model/Matrix.h \
-    ../src/NerualNetworkMLP/Model/Dataset.h \
+    ../src/NerualNetworkMLP/Model/MNN/Matrix.h \
     ../src/NerualNetworkMLP/Model/GNN/GNN.h \
     ../src/NerualNetworkMLP/Model/GNN/Neuron.h \
-    ../src/NerualNetworkMLP/Model/constantValues.h \
     ../src/NerualNetworkMLP/Model/GNN/Layer.h  \
-    NerualNetworkMLP/Model/Metrics.h
+    ../src/NerualNetworkMLP/Model/Dataset.h \
+    ../src/NerualNetworkMLP/Model/constantValues.h \
+    ../src/NerualNetworkMLP/Model/ActivateFunction.h \
+    ../src/NerualNetworkMLP/Model/MNN/MNN.h \
+    ../src/NerualNetworkMLP/Model/Metrics.h
 
 FORMS += \
     ../src/NerualNetworkMLP/View/viewapplication.ui

@@ -12,11 +12,10 @@ Matrix::Matrix(int rows, int cols) : _rows(rows), _cols(cols) {
     }
 }
 
-Matrix::Matrix(double* mass,int numOfElem):_rows(numOfElem),_cols(1){
-    if(numOfElem<0&& mass==nullptr) throw std::invalid_argument("Invalid size of matrix");
+Matrix::Matrix(const Image& image):_rows(NUM_OF_PIXELS),_cols(1){
     _matrix=New_matrix(this->_rows, this->_cols);
-    for(int i=0;i<numOfElem;i++){
-        _matrix[i][0]=mass[i];
+    for(int i=0;i<_rows;i++){
+        _matrix[i][0]=image.pixel(i);
     }
 }
 
@@ -132,7 +131,7 @@ void Matrix::mul_matrix(const Matrix& other) {
         for (int i = 0; i < this->_rows; i++) {
             for (int j = 0; j < other._cols; j++) {
                 for (int k = 0; k < other._rows; k++) {
-                    result(i, j) += (*this)(i, k) * other(k, j);
+                    result._matrix[i][j] += (*this)(i, k) * other(k, j);
                 }
             }
         }
@@ -145,7 +144,7 @@ void Matrix::mul_matrix(const Matrix& other) {
 void Matrix::mul_number(const double num) {
     for (int i = 0; i < this->_rows; i++) {
         for (int j = 0; j < this->_cols; j++) {
-            (*this)(i, j) *= num;
+            (*this)._matrix[i][j] *= num;
         }
     }
 }
@@ -188,7 +187,7 @@ Matrix Matrix::operator=(const Matrix& other) {
     return *this;
 }
 
-double& Matrix::operator()(int i, int j) const {
+double Matrix::operator()(int i, int j) const {
     if (i < this->_rows && i >= 0 && j < this->_cols && j >= 0) {
         return (this->_matrix[i][j]);
     } else {
@@ -196,11 +195,15 @@ double& Matrix::operator()(int i, int j) const {
     }
 }
 
+void Matrix::setValue(int i, int j,double value){
+    _matrix[i][j]=
+}
+
 Matrix Matrix::transpose() {
     Matrix result(this->_cols, this->_rows);
     for (int i = 0; i < result._rows; i++) {
         for (int j = 0; j < result._cols; j++) {
-            result(i, j) = this->_matrix[j][i];
+            result._matrix[i][j] = this->_matrix[j][i];
         }
     }
     return result;
@@ -214,7 +217,7 @@ Matrix Matrix::create_minor(int row, int column) {
         if (i != row) {
             for (int j = 0; j < this->_cols; j++) {
                 if (j != column) {
-                    minor(i - flag_row, j - flag_column) = (*this)(i, j);
+                    minor._matrix[i - flag_row] [j - flag_column] = (*this)(i, j);
                 } else {
                     flag_column = 1;
                 }
@@ -254,9 +257,9 @@ Matrix Matrix::calc_complements() {
             for (int j = 0; j < this->_cols; j++) {
                 Matrix minor = this->create_minor(i, j);
                 if ((i + j) % 2 == 0) {
-                    result(i, j) = minor.determinant();
+                    result._matrix[i][j] = minor.determinant();
                 } else {
-                    result(i, j) = -minor.determinant();
+                    result._matrix[i][j] = -minor.determinant();
                 }
             }
         }

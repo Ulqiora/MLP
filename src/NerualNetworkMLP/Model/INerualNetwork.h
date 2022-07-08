@@ -1,51 +1,14 @@
-#ifndef INERUALNETWORK_H
-#define INERUALNETWORK_H
-#include "Matrix.h"
-#include "ActicateFunction.h"
+#pragma once 
 #include "Dataset.h"
-#include <vector>
-#include <QFile>
+#include "Metrics.h"
 namespace s21{
-
-enum TypeLayer{OUTPUT=26,INPUT=784,HIDDEN=200};
-
-class INerualNetwork
-{
+class INerualNetwork{
 public:
-    char predict();
-
-    void loadWeight();
-    void saveWeight();
-protected:
+    virtual void train(Dataset& data,Dataset&  dataTest, double percentTestData,int numOfEpoch) = 0;
+    virtual Metrics test(Dataset& data, double percentTestData) = 0;
+    virtual void saveWeights(std::string filename) = 0;
+    virtual void loadWeights(std::string filename) = 0;
+    virtual void crossValidate(Dataset& dateTrain,int k) = 0;
+    virtual void setLearningRate(double value) = 0;
 };
-
-class NerualNetworkMatrix{
-public:
-    explicit NerualNetworkMatrix(unsigned int numHiddenLayers);
-    void loadWeight(const QFile& filename);
-    void saveWeight(const QFile& filename);
-    void train(unsigned int epoch,Dataset& data);
-    void trainCrossValidation(int numOfGroup,Dataset& data);
-
-private:
-    ActicateFunction _func;
-    unsigned int _hiddenLayers;
-    std::vector<Matrix> _neuronWeightMat;
-    std::vector<Matrix> _biosWeightMat;
-    std::vector<Matrix> _valueNeruals;
-    std::vector<Matrix> _valueErrors;
-    double _currentError;
-
-private:
-    void setWeightMatrix();
-    void setBiosMatrix();
-    void forwardPropagation(double* pixels);
-    void backPropagation();
-    void calcError(unsigned int answer);
-    int getPredict();
-    void updateWeight();
-};
-
-
-}    //    namespace s21
-#endif // INERUALNETWORK_H
+}

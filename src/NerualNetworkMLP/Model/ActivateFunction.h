@@ -2,7 +2,7 @@
 #define ACTICATEFUNCTION_H
 #include <functional>
 #include <cmath>
-#include "Matrix.h"
+#include "MNN/Matrix.h"
 namespace s21{
 
 enum class typeFunction{SIGMOIND=0};

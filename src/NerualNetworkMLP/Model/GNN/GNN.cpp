@@ -19,7 +19,6 @@ void GraphNerualNetwork::backPropagation(int answer) {
 }
 
 void GraphNerualNetwork::updateWeight(int epoch) {
-//    qDebug()<<"LR="<<lr/epoch;
     for(int i=_numOfHiddenLayers+1;i>0;--i){
         _layers[i].updateWeightNeurons(_layers[i-1],lr/epoch);
     }

@@ -2,6 +2,9 @@
 #define MATRIX_H
 #include <cmath>
 #include <iostream>
+#include <vector>
+#include "../constantValues.h"
+#include "../Dataset.h"
 namespace s21{
 class Matrix {
     friend Matrix operator*(const Matrix& other, double const num);
@@ -18,7 +21,7 @@ class Matrix {
  public:
     Matrix();
     Matrix(int rows, int cols);
-    Matrix(double* mass,int numOfElem);
+    Matrix(const Image& pixels);
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     ~Matrix();
@@ -47,7 +50,8 @@ class Matrix {
     double determinant();
     Matrix inverse_matrix();
 
-    double& operator()(int i, int j) const;
+    double operator()(int i, int j) const;
+    void setValue(int i, int j,double value);
     // other
     int getRows()const;
     int getCols()const;
