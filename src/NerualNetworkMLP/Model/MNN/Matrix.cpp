@@ -44,10 +44,13 @@ double** Matrix::New_matrix(int rows, int cols) {
 }
 
 void Matrix::Free_matrix() {
-    for (int i = 0; i < _rows; i++) {
-        delete[] _matrix[i];
+    if(_matrix!=nullptr){
+        for (int i = 0; i < _rows; i++) {
+            delete[] _matrix[i];
+        }
+        delete[] _matrix;
+        _matrix=nullptr;
     }
-    delete[] _matrix;
 }
 
 void Matrix::CopyMatrix(double** matrix_copy) {
@@ -196,7 +199,7 @@ double Matrix::operator()(int i, int j) const {
 }
 
 void Matrix::setValue(int i, int j,double value){
-    _matrix[i][j]=
+    _matrix[i][j]=value;
 }
 
 Matrix Matrix::transpose() {

@@ -27,11 +27,12 @@ HEADERS += \
     ../src/NerualNetworkMLP/Model/constantValues.h \
     ../src/NerualNetworkMLP/Model/ActivateFunction.h \
     ../src/NerualNetworkMLP/Model/MNN/MNN.h \
-    ../src/NerualNetworkMLP/Model/Metrics.h
+    ../src/NerualNetworkMLP/Model/Metrics.h \
+    NerualNetworkMLP/Model/INerualNetwork.h
 
-FORMS += \
-    ../src/NerualNetworkMLP/View/viewapplication.ui
+#FORMS += \
+#    ../src/NerualNetworkMLP/View/viewapplication.ui
 
 
-RESOURCES += \
-    ../src/NerualNetworkMLP/Resources/resources.qrc
+#RESOURCES += \
+#    ../src/NerualNetworkMLP/Resources/resources.qrc

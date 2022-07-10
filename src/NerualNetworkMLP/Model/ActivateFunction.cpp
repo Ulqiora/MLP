@@ -18,15 +18,14 @@ Matrix ActivateFunction::use(Matrix& arg){
     Matrix result(rows,cols);
     for(int i=0;i<rows;i++){
         for(int j=0;j<cols;j++){
-            result(i,j)=_function(arg(i,j));
+            result.setValue(i,j,_function(arg(i,j)));
         }
     }
     return result;
 }
 
 double ActivateFunction::useDerivative(double arg){
-    double res=_derivative(arg);
-    return res;
+    return _derivative(arg);
 }
 
 Matrix ActivateFunction::useDerivative(Matrix& arg){
@@ -34,7 +33,7 @@ Matrix ActivateFunction::useDerivative(Matrix& arg){
     Matrix result(rows,cols);
     for(int i=0;i<rows;i++){
         for(int j=0;j<cols;j++){
-            result(i,j)=_derivative(arg(i,j));
+            result.setValue(i,j,_derivative(arg(i,j)));
         }
     }
     return result;

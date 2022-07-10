@@ -14,6 +14,7 @@ class MatrixNerualNetwork : public INerualNetwork {
     std::vector<Matrix> _valueNeruals;
     std::vector<Matrix> _valueErrors;
     std::vector<double> _accuracyHistory;
+    Metrics _metrics;
 
  private:
     void setWeightMatrix();
@@ -26,10 +27,16 @@ class MatrixNerualNetwork : public INerualNetwork {
  public:
     MatrixNerualNetwork(unsigned int numHiddenLayers);
     void train(Dataset& data, Dataset& dataTest, double percentTestData, int numOfEpoch) override;
-    Metrics test(Dataset& data, double percentTestData) override;
-    void saveWeights(std::string filename) override;
-    void loadWeights(std::string filename) override;
-    void crossValidate(Dataset& dateTrain, int k) override;
-    void setLearningRate(double value) override;
+    double test(Dataset& data, double percentTestData) override;
+    void saveWeights(std::string filename) override{}
+    void loadWeights(std::string filename) override{}
+    void crossValidate(Dataset& dateTrain, int k) override{}
+    void setLearningRate(double value) override{}
+    Metrics metrics()override{
+        return _metrics;
+    }
+    virtual std::vector<double> getAccuracyHistory() override{
+        return _accuracyHistory;
+    }
 };
 }  // namespace s21

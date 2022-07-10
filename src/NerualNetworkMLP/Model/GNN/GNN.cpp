@@ -35,6 +35,7 @@ GraphNerualNetwork::GraphNerualNetwork(unsigned int numHiddenLayers) : _numOfHid
 
 void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentTestData,int epoch) {
     _accuracyHistory.clear();
+    _metrics.reset();
     for (int i = 0; i < epoch; i++) {
         int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
@@ -42,24 +43,24 @@ void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentT
             backPropagation(data.getAnswer(j));
             updateWeight(i+1);
         }
-        test(dataTest,percentTestData);
+        _accuracyHistory.push_back(test(dataTest,percentTestData));
     }
+    _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn);
+    _metrics.accuracy/=(_metrics.solutions.tp+_metrics.solutions.tn+_metrics.solutions.fp+_metrics.solutions.fn);
+    _metrics.precision=_metrics.solutions.tp/(_metrics.solutions.tp+_metrics.solutions.fp);
+    _metrics.recall=_metrics.solutions.tp/(_metrics.solutions.tp+_metrics.solutions.fn);
+    _metrics.fMeasure=2*(_metrics.precision*_metrics.recall)/(_metrics.precision*_metrics.recall);
 }
 
-Metrics GraphNerualNetwork::test(Dataset& date, double percentTestData) {
-    Metrics metrics;
+double GraphNerualNetwork::test(Dataset& data, double percentTestData) {
+    int dataSize=data.getSize()*percentTestData;
     int accuracy=0;
-    int dataSize=date.getSize()*percentTestData;
     for (int j = 0; j < dataSize; ++j) {
-        forwardPropagation(date.getImage(j));
-        accuracy+=isCorrectPrediction(date.getAnswer(j));
-        _layers.back().calcSolutions(metrics,date.getAnswer(j));
+        forwardPropagation(data.getImage(j));
+        accuracy+=isCorrectPrediction(data.getAnswer(j));
+        _layers.back().calcSolutions(_metrics,data.getAnswer(j));
     }
-    metrics.accuracy =static_cast<double>(accuracy) / date.getSize() * 100.0;
-    metrics.precision=metrics.solutions.tp/(metrics.solutions.tp+metrics.solutions.fp);
-    metrics.recall=metrics.solutions.tp/(metrics.solutions.tp+metrics.solutions.fn);
-    metrics.fMeasure=2*(metrics.precision*metrics.recall)/(metrics.precision*metrics.recall);
-    return metrics;
+    return static_cast<double>(accuracy)/dataSize;
 }
 
 void GraphNerualNetwork::saveWeights(std::string filename){
