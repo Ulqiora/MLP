@@ -59,6 +59,7 @@ double GraphNerualNetwork::test(Dataset& data, double percentTestData) {
         forwardPropagation(data.getImage(j));
         accuracy+=isCorrectPrediction(data.getAnswer(j));
         _layers.back().calcSolutions(_metrics,data.getAnswer(j));
+        qDebug()<<accuracy;
     }
     return static_cast<double>(accuracy)/dataSize;
 }

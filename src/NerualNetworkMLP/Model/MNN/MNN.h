@@ -11,6 +11,7 @@ class MatrixNerualNetwork : public INerualNetwork {
     ActivateFunction _func;
     std::vector<Matrix> _neuronWeightMat;
     std::vector<Matrix> _biosWeightMat;
+    std::vector<Matrix> _biosErrors;
     std::vector<Matrix> _valueNeruals;
     std::vector<Matrix> _valueErrors;
     std::vector<double> _accuracyHistory;
@@ -29,7 +30,31 @@ class MatrixNerualNetwork : public INerualNetwork {
     void train(Dataset& data, Dataset& dataTest, double percentTestData, int numOfEpoch) override;
     double test(Dataset& data, double percentTestData) override;
     void saveWeights(std::string filename) override{}
-    void loadWeights(std::string filename) override{}
+    void loadWeights(std::string filename) override{
+        std::ifstream file(filename);
+        unsigned int numOflayers=0;
+        if(!file.is_open()){
+            throw std::invalid_argument("This file can't be opened!");
+        }
+        file>>numOflayers;
+        if(numOflayers!=_numOfHiddenLayers)
+            throw std::invalid_argument("This file is not for nerual network for!");
+        if(file.peek()=='\n') file.ignore();
+        double temp=0.0;
+        for(int i=0;i<static_cast<int>(_neuronWeightMat.size());i++){
+            for(int j=0;j<_neuronWeightMat[i].getRows();j++){
+                file>>temp;
+                _biosWeightMat[i].setValue(j,0,temp);
+                if (file.peek()==' ')file.ignore();
+                for(int k=0;k<_neuronWeightMat[i].getCols();++k){
+                    file>>temp;
+                    _neuronWeightMat[i].setValue(j,k,temp);
+                    if(file.peek()==' ') file.ignore();
+                }
+                file.ignore();
+            }
+        }
+    }
     void crossValidate(Dataset& dateTrain, int k) override{}
     void setLearningRate(double value) override{}
     Metrics metrics()override{

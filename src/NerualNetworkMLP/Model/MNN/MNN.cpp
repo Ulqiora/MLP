@@ -12,26 +12,26 @@ MatrixNerualNetwork::MatrixNerualNetwork(unsigned int numHiddenLayers):
 
 void MatrixNerualNetwork::setWeightMatrix() {
     Matrix inputLayer(static_cast<int>(TypeLayer::HIDDEN),static_cast<int>(TypeLayer::INPUT));
-    inputLayer.setRandom();
+//    inputLayer.setRandom();
     _neuronWeightMat.push_back(inputLayer);
     for(unsigned int i=0;i<_numOfHiddenLayers-1;i++){
         Matrix hiddenLayer(static_cast<int>(TypeLayer::HIDDEN),static_cast<int>(TypeLayer::HIDDEN));
-        hiddenLayer.setRandom();
+//        hiddenLayer.setRandom();
         _neuronWeightMat.push_back(hiddenLayer);
     }
     Matrix hiddenLayer(static_cast<int>(TypeLayer::OUTPUT),static_cast<int>(TypeLayer::HIDDEN));
-    hiddenLayer.setRandom();
+//    hiddenLayer.setRandom();
     _neuronWeightMat.push_back(hiddenLayer);
 }
 
 void MatrixNerualNetwork::setBiosMatrix(){
     for(unsigned int i=0;i<_numOfHiddenLayers;i++){
         Matrix weightBios_i(static_cast<int>(TypeLayer::HIDDEN),1);
-        weightBios_i.setRandom();
+//        weightBios_i.setRandom();
         _biosWeightMat.push_back(weightBios_i);
     }
     Matrix weightBios_last(static_cast<int>(TypeLayer::OUTPUT),1);
-    weightBios_last.setRandom();
+//    weightBios_last.setRandom();
     _biosWeightMat.push_back(weightBios_last);
 }
 
@@ -44,31 +44,28 @@ void MatrixNerualNetwork::forwardPropagation(const Image& image){
 }
 
 void MatrixNerualNetwork::backPropagation(int answer){
-    qDebug()<<answer;
     Matrix errors(static_cast<int>(TypeLayer::OUTPUT),1);
     for(int i=0;i<errors.getRows() ;i++){
-        double res= (i==answer)-_valueNeruals.back()(i,0)*_func.useDerivative(_valueNeruals.back()(i,0));
-        qDebug()<<"Derivative"<<_func.useDerivative(_valueNeruals.back()(i,0))<<'\n';
-        qDebug()<<i+1<<" нейрон. Value="<<_valueNeruals.back()(i,0)<<". Answer="<<(i==answer)<<". Error="<<res;
+        double res= (_valueNeruals.back()(i,0)-(i==answer));
         errors.setValue(i,0,res);
     }
     _valueErrors.back()=errors;
     for(int i=_numOfHiddenLayers-1;i>=0;--i){
         _valueErrors[i]=_neuronWeightMat[i+1].transpose()*_valueErrors[i+1];
-        for(int j=0;j<_valueErrors[i].getRows();++j){
-            _valueErrors[i].setValue(j,0,_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
-        }
     }
 }
 
 void MatrixNerualNetwork::updateWeight(int numOfEpoch)
 {
-    for(unsigned int i=0;i<_neuronWeightMat.size();++i){
+    for(unsigned int i=0;i<_numOfHiddenLayers+1;++i){
         for(int j=0;j<_neuronWeightMat[i].getRows();++j){
             for(int k=0;k<_neuronWeightMat[i].getCols();++k){
-                _neuronWeightMat[i].setValue(j,k,_neuronWeightMat[i](j,k)-_valueNeruals[i](k,0)*_valueErrors[i](j,0));
+                qDebug()<<-lr*_valueNeruals[i](k,0)*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0));
+                _neuronWeightMat[i].setValue(j,k,
+                   _neuronWeightMat[i](j,k)-lr*_valueNeruals[i](k,0)*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
             }
-            _biosWeightMat[i].setValue(j,0,_biosWeightMat[i](j,0)-_valueErrors[i](j,0));
+            qDebug()<<-lr*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0));
+            _biosWeightMat[i].setValue(j,0,_biosWeightMat[i](j,0)-lr*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
         }
     }
 }
@@ -100,6 +97,7 @@ double MatrixNerualNetwork::test(Dataset &data, double percentTestData)
         forwardPropagation(data.getImage(j));
         accuracy+=isCorrectPrediction(data.getAnswer(j));
         calcSolutions(_metrics,data.getAnswer(j));
+        qDebug()<<accuracy;
     }
     return static_cast<double>(accuracy)/dataSize;
 }

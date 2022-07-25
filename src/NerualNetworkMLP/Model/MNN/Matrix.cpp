@@ -296,7 +296,7 @@ int Matrix::getCols() const { return this->_cols; }
 void Matrix::setRandom(){
     for(int i=0;i<_rows;i++){
         for(int j=0;j<_cols;j++){
-            _matrix[i][j]=(std::rand()%10000+1.0)/10000.0;
+            _matrix[i][j]=0;
         }
     }
 }
