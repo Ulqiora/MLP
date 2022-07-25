@@ -2,8 +2,7 @@
 namespace s21 {
 Neuron::Neuron(TypeLayer numOfWeights,typeFunction type) : _value(0), _weights(static_cast<int>(numOfWeights)),_func(type) {
     for (auto& i : _weights) {
-//        i = QRandomGenerator::global()->bounded(-100, 100) / 100.0;
-        i=0;
+        i = QRandomGenerator::global()->bounded(-100, 100) / 100.0;
     }
 }
 
@@ -21,7 +20,6 @@ void Neuron::forwardPropagation(const std::vector<Neuron> &inputNeurons)
 void Neuron::backPropagation(int answer)
 {
     _error=(_value-answer);
-
 }
 
 int Neuron::getNumOfWeights() { return _weights.size(); }

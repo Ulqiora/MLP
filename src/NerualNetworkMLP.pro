@@ -28,7 +28,7 @@ HEADERS += \
     ../src/NerualNetworkMLP/Model/ActivateFunction.h \
     ../src/NerualNetworkMLP/Model/MNN/MNN.h \
     ../src/NerualNetworkMLP/Model/Metrics.h \
-    NerualNetworkMLP/Model/INerualNetwork.h
+    ../src/NerualNetworkMLP/Model/INerualNetwork.h
 
 #FORMS += \
 #    ../src/NerualNetworkMLP/View/viewapplication.ui

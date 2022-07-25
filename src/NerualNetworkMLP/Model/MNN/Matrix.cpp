@@ -39,6 +39,9 @@ double** Matrix::New_matrix(int rows, int cols) {
     double** _matrix = new double*[rows];
     for (int i = 0; i < rows; i++) {
         _matrix[i] = new double[cols]();
+        for(int j=0;j<cols;j++){
+            _matrix[i][j]=1;
+        }
     }
     return _matrix;
 }

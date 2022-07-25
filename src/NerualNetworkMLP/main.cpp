@@ -21,17 +21,12 @@ int main(int argc, char *argv[])
         qDebug()<<e.what();
     }
     s21::GraphNerualNetwork gnn(2);
-    qDebug()<<"train start";
-    auto begin = std::chrono::steady_clock::now();
-    gnn.train(date,dateTest,1,5);
-    qDebug()<<gnn.getAccuracyHistory();
-    auto end = std::chrono::steady_clock::now();
-    auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
-    qDebug() << "All time: " << elapsed_ms.count() << " s\n";
-//    gnn.saveWeights(QFileDialog::getSaveFileName().toStdString());
-//    std::string weightsFile=QFileDialog::getOpenFileName().toStdString();
-//    gnn.loadWeights(weightsFile);
-    gnn.test(dateTest,1.0);
+    gnn.train(date,dateTest,0.1,1);
+    gnn.saveWeights(QFileDialog::getOpenFileName().toStdString());
+    gnn.loadWeights(QFileDialog::getOpenFileName().toStdString());
+//    mnn.loadWeights(QFileDialog::getOpenFileName().toStdString());
+//    mnn.train(date,dateTest,1,1);
+    gnn.train(date,dateTest,0.1,1);
     return a.exec();
 }
 
