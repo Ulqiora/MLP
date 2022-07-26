@@ -47,7 +47,7 @@ void MatrixNerualNetwork::backPropagation(int answer){
     Matrix errors(static_cast<int>(TypeLayer::OUTPUT),1);
     for(int i=0;i<errors.getRows() ;i++){
         double res= (_valueNeruals.back()(i,0)-(i==answer));
-        qDebug()<<res;
+//        qDebug()<<res;
         errors.setValue(i,0,res);
     }
     _valueErrors.back()=errors;
@@ -61,11 +61,9 @@ void MatrixNerualNetwork::updateWeight(int numOfEpoch)
     for(unsigned int i=0;i<_numOfHiddenLayers+1;++i){
         for(int j=0;j<_neuronWeightMat[i].getRows();++j){
             for(int k=0;k<_neuronWeightMat[i].getCols();++k){
-                if (i==0&&j==0) qDebug()<<-lr*_valueNeruals[i](k,0)*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0));
                 _neuronWeightMat[i].setValue(j,k,
                    _neuronWeightMat[i](j,k)-lr*_valueNeruals[i](k,0)*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
             }
-            if (i==0&&j==0) qDebug()<<-lr*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0));
             _biosWeightMat[i].setValue(j,0,_biosWeightMat[i](j,0)-lr*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
         }
     }
@@ -78,7 +76,19 @@ void MatrixNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percent
         int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
             forwardPropagation(data.getImage(j));
+            if(i==0&&j==0){
+                qDebug()<<"Значения последнего слоя MNN.";
+                for(int k=0;k<64;k++){
+                    qDebug()<<_valueNeruals[1](k,0);
+                }
+            }
             backPropagation(data.getAnswer(j));
+//            if(i==0&&j==0){
+//                qDebug()<<"Ошибки последнего слоя MNN.";
+//                for(int k=0;k<26;k++){
+//                    qDebug()<<_valueErrors.back()(k,0);
+//                }
+//            }
             updateWeight(i+1);
         }
         _accuracyHistory.push_back(test(dataTest,percentTestData));
@@ -98,7 +108,7 @@ double MatrixNerualNetwork::test(Dataset &data, double percentTestData)
         forwardPropagation(data.getImage(j));
         accuracy+=isCorrectPrediction(data.getAnswer(j));
         calcSolutions(_metrics,data.getAnswer(j));
-        qDebug()<<accuracy;
+//        qDebug()<<accuracy;
     }
     return static_cast<double>(accuracy)/dataSize;
 }

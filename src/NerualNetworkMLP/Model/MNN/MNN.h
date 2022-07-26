@@ -29,7 +29,22 @@ class MatrixNerualNetwork : public INerualNetwork {
     MatrixNerualNetwork(unsigned int numHiddenLayers);
     void train(Dataset& data, Dataset& dataTest, double percentTestData, int numOfEpoch) override;
     double test(Dataset& data, double percentTestData) override;
-    void saveWeights(std::string filename) override{}
+    void saveWeights(std::string filename) override{
+        std::ofstream file(filename);
+        if(!file.is_open())
+            throw std::invalid_argument("This file can't be opened!");
+        file<<_numOfHiddenLayers<<'\n';
+        auto biosWeightsMat=_biosWeightMat.begin();
+        for(auto& weightsMat:_neuronWeightMat){
+            for(int j=0;j<weightsMat.getRows();j++){
+                file<<(*biosWeightsMat)(j,0)<<' ';
+                for(int k=0;k<weightsMat.getCols();k++){
+                    file<<weightsMat(j,k)<<' ';
+                }
+                file<<'\n';
+            }
+        }
+    }
     void loadWeights(std::string filename) override{
         std::ifstream file(filename);
         unsigned int numOflayers=0;

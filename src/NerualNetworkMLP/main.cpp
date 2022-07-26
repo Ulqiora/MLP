@@ -12,21 +12,17 @@ int main(int argc, char *argv[])
     s21::Dataset date,dateTest;
     try {
         date.setDate(str);
-    }  catch (std::exception& e) {
-        qDebug()<<e.what();
-    }
-    try {
         dateTest.setDate(str1);
     }  catch (std::exception& e) {
         qDebug()<<e.what();
     }
     s21::GraphNerualNetwork gnn(2);
-    gnn.train(date,dateTest,0.1,1);
+    s21::MatrixNerualNetwork mnn(2);
     gnn.saveWeights(QFileDialog::getOpenFileName().toStdString());
-    gnn.loadWeights(QFileDialog::getOpenFileName().toStdString());
-//    mnn.loadWeights(QFileDialog::getOpenFileName().toStdString());
-//    mnn.train(date,dateTest,1,1);
+    mnn.loadWeights(QFileDialog::getOpenFileName().toStdString());
+    mnn.saveWeights(QFileDialog::getOpenFileName().toStdString());
     gnn.train(date,dateTest,0.1,1);
+    mnn.train(date,dateTest,0.1,1);
     return a.exec();
 }
 

@@ -20,7 +20,9 @@ public:
     void calcForBackPropagation(const int answer);
     void updateWeightNeurons(Layer& layerPrev,double lr);
     int getNumOfNeurons();
-    Neuron operator ()(int i)const;
+    Neuron operator ()(int i)const{
+                return _neurons[i];
+            }
     void printLayer(std::ofstream& file){
         for(auto& neuron:_neurons){
             neuron.printNeuron(file);
