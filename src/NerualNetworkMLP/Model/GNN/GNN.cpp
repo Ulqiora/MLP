@@ -40,22 +40,23 @@ void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentT
         int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
             forwardPropagation(data.getImage(j));
-            if(i==0&&j==0){
-                qDebug()<<"Значения последнего слоя GNN.";
-                for(int k=0;k<_layers[1].getNumOfNeurons();k++){
-                    qDebug()<<_layers[1](k).value();
-                }
-            }
             backPropagation(data.getAnswer(j));
 //            if(i==0&&j==0){
 //                qDebug()<<"Ошибки последнего слоя GNN.";
-//                for(int k=0;k<_layers[_numOfHiddenLayers+1].getNumOfNeurons();k++){
-//                    qDebug()<<_layers[_numOfHiddenLayers+1](k).error();
+//                for(int k=0;k<_layers[3].getNumOfNeurons();k++){
+//                    qDebug()<<_layers[3](k).error();
 //                }
 //            }
             updateWeight(i+1);
+//            if(i==0&&j==0){
+//                qDebug()<<"Ошибки последнего слоя GNN.";
+//                for(int k=0;k<64;k++){
+//                    qDebug()<<_layers[2](0).weight(k);
+//                }
+//            }
         }
         _accuracyHistory.push_back(test(dataTest,percentTestData));
+        qDebug()<<"Эпоха"<<i+1<<": "<<_accuracyHistory.back();
     }
     _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn);
     _metrics.accuracy/=(_metrics.solutions.tp+_metrics.solutions.tn+_metrics.solutions.fp+_metrics.solutions.fn);

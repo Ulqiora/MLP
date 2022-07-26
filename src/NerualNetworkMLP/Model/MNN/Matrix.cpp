@@ -39,9 +39,6 @@ double** Matrix::New_matrix(int rows, int cols) {
     double** _matrix = new double*[rows];
     for (int i = 0; i < rows; i++) {
         _matrix[i] = new double[cols]();
-        for(int j=0;j<cols;j++){
-            _matrix[i][j]=1;
-        }
     }
     return _matrix;
 }
@@ -299,7 +296,7 @@ int Matrix::getCols() const { return this->_cols; }
 void Matrix::setRandom(){
     for(int i=0;i<_rows;i++){
         for(int j=0;j<_cols;j++){
-            _matrix[i][j]=0;
+            _matrix[i][j]=QRandomGenerator::global()->bounded(-100, 100) / 100.0;;
         }
     }
 }

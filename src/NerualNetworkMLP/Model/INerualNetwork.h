@@ -12,5 +12,6 @@ public:
     virtual void setLearningRate(double value) = 0;
     virtual std::vector<double> getAccuracyHistory()=0;
     virtual Metrics metrics() = 0;
+    virtual int predict(const Image& image)=0;
 };
 }

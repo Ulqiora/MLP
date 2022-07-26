@@ -78,5 +78,6 @@ class MatrixNerualNetwork : public INerualNetwork {
     virtual std::vector<double> getAccuracyHistory() override{
         return _accuracyHistory;
     }
+    virtual int predict(const Image& image)override{}
 };
 }  // namespace s21

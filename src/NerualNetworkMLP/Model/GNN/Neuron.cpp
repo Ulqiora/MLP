@@ -1,4 +1,4 @@
-#include "Neuron.h"
+ #include "Neuron.h"
 namespace s21 {
 Neuron::Neuron(TypeLayer numOfWeights,typeFunction type) : _value(0), _weights(static_cast<int>(numOfWeights)),_func(type) {
     for (auto& i : _weights) {

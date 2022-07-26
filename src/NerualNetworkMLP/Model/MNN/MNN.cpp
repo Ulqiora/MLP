@@ -47,7 +47,6 @@ void MatrixNerualNetwork::backPropagation(int answer){
     Matrix errors(static_cast<int>(TypeLayer::OUTPUT),1);
     for(int i=0;i<errors.getRows() ;i++){
         double res= (_valueNeruals.back()(i,0)-(i==answer));
-//        qDebug()<<res;
         errors.setValue(i,0,res);
     }
     _valueErrors.back()=errors;
@@ -62,9 +61,9 @@ void MatrixNerualNetwork::updateWeight(int numOfEpoch)
         for(int j=0;j<_neuronWeightMat[i].getRows();++j){
             for(int k=0;k<_neuronWeightMat[i].getCols();++k){
                 _neuronWeightMat[i].setValue(j,k,
-                   _neuronWeightMat[i](j,k)-lr*_valueNeruals[i](k,0)*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
+                   _neuronWeightMat[i](j,k)-lr/numOfEpoch*_valueNeruals[i](k,0)*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
             }
-            _biosWeightMat[i].setValue(j,0,_biosWeightMat[i](j,0)-lr*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
+            _biosWeightMat[i].setValue(j,0,_biosWeightMat[i](j,0)-lr/numOfEpoch*_valueErrors[i](j,0)*_func.useDerivative(_valueNeruals[i+1](j,0)));
         }
     }
 }
@@ -76,22 +75,23 @@ void MatrixNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percent
         int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
             forwardPropagation(data.getImage(j));
-            if(i==0&&j==0){
-                qDebug()<<"Значения последнего слоя MNN.";
-                for(int k=0;k<64;k++){
-                    qDebug()<<_valueNeruals[1](k,0);
-                }
-            }
-            backPropagation(data.getAnswer(j));
 //            if(i==0&&j==0){
-//                qDebug()<<"Ошибки последнего слоя MNN.";
-//                for(int k=0;k<26;k++){
-//                    qDebug()<<_valueErrors.back()(k,0);
+//                qDebug()<<"Значения последнего слоя MNN.";
+//                for(int k=0;k<_valueNeruals[3].getRows();k++){
+//                    qDebug()<<_valueNeruals[3](k,0);
 //                }
 //            }
+            backPropagation(data.getAnswer(j));
             updateWeight(i+1);
+//            if(i==0&&j==0){
+//                qDebug()<<"Ошибки последнего слоя MNN.";
+//                for(int k=0;k<_neuronWeightMat[1].getCols();k++){
+//                    qDebug()<<_neuronWeightMat[1](0,k);
+//                }
+//            }
         }
         _accuracyHistory.push_back(test(dataTest,percentTestData));
+        qDebug()<<_accuracyHistory.back();
     }
     _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn);
     _metrics.accuracy/=(_metrics.solutions.tp+_metrics.solutions.tn+_metrics.solutions.fp+_metrics.solutions.fn);

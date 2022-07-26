@@ -27,8 +27,12 @@ public:
     Metrics metrics()override{
         return _metrics;
     }
-    virtual std::vector<double> getAccuracyHistory()override{
+    std::vector<double> getAccuracyHistory()override{
         return _accuracyHistory;
+    }
+    virtual int predict(const Image& image)override{
+        forwardPropagation(image);
+        return _layers.back().getIndexOfMaxValueNeuron();
     }
 };
 } // namespace s21

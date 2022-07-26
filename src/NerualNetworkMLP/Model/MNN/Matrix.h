@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+#include <QRandomGenerator>
 #include "../constantValues.h"
 #include "../Dataset.h"
 namespace s21{
