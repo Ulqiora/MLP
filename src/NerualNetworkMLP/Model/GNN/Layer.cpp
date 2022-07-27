@@ -73,7 +73,6 @@ void Layer::calcForBackPropagation(const int answer) {
     int i=0;
     for (auto neuron=_neurons.begin();neuron!=_neurons.end();++neuron) {
         neuron->backPropagation(i==answer);
-//        qDebug()<<neuron->error();
         ++i;
     }
 }

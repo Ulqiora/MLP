@@ -47,7 +47,6 @@ double Neuron::bios(){
     return _bias;
 }
 void Neuron::calcToEditBias(double lr){
-//    qDebug()<<-_error*_func.useDerivative(_value)*lr;
     _bias-=_error*_func.useDerivative(_value)*lr;
 }
 
@@ -55,7 +54,6 @@ double Neuron::weight(int i)const{
     return _weights[i];
 }
 void Neuron::calcToEditWeight(double index,double lr,double valueNeuronOfPrevLayer){
-//    qDebug()<<-lr*valueNeuronOfPrevLayer*_func.useDerivative(_value)*_error;
     _weights[index]-=lr*valueNeuronOfPrevLayer*_func.useDerivative(_value)*_error;
 }
 

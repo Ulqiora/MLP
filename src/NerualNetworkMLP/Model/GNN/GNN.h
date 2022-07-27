@@ -23,14 +23,16 @@ public:
     void saveWeights(std::string filename)override;
     void loadWeights(std::string filename)override;
     void crossValidate(Dataset& dateTrain,int k)override;
-    void setLearningRate(double value)override{}
+    void setLearningRate(double value)override{
+        lr=value;
+    }
     Metrics metrics()override{
         return _metrics;
     }
-    std::vector<double> getAccuracyHistory()override{
+    std::vector<double> getAccuracyHistory() override {
         return _accuracyHistory;
     }
-    virtual int predict(const Image& image)override{
+    virtual int predict(const Image& image) override {
         forwardPropagation(image);
         return _layers.back().getIndexOfMaxValueNeuron();
     }

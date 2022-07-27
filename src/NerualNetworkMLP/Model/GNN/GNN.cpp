@@ -41,22 +41,9 @@ void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentT
         for (int j = 0; j < dataSize; ++j) {
             forwardPropagation(data.getImage(j));
             backPropagation(data.getAnswer(j));
-//            if(i==0&&j==0){
-//                qDebug()<<"Ошибки последнего слоя GNN.";
-//                for(int k=0;k<_layers[3].getNumOfNeurons();k++){
-//                    qDebug()<<_layers[3](k).error();
-//                }
-//            }
             updateWeight(i+1);
-//            if(i==0&&j==0){
-//                qDebug()<<"Ошибки последнего слоя GNN.";
-//                for(int k=0;k<64;k++){
-//                    qDebug()<<_layers[2](0).weight(k);
-//                }
-//            }
         }
         _accuracyHistory.push_back(test(dataTest,percentTestData));
-        qDebug()<<"Эпоха"<<i+1<<": "<<_accuracyHistory.back();
     }
     _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn);
     _metrics.accuracy/=(_metrics.solutions.tp+_metrics.solutions.tn+_metrics.solutions.fp+_metrics.solutions.fn);
@@ -72,7 +59,6 @@ double GraphNerualNetwork::test(Dataset& data, double percentTestData) {
         forwardPropagation(data.getImage(j));
         accuracy+=isCorrectPrediction(data.getAnswer(j));
         _layers.back().calcSolutions(_metrics,data.getAnswer(j));
-//        qDebug()<<accuracy;
     }
     return static_cast<double>(accuracy)/dataSize;
 }

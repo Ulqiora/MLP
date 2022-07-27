@@ -13,5 +13,6 @@ public:
     virtual std::vector<double> getAccuracyHistory()=0;
     virtual Metrics metrics() = 0;
     virtual int predict(const Image& image)=0;
+    virtual ~INerualNetwork(){}
 };
 }

@@ -2,7 +2,6 @@
 #define DATASET_H
 #include <vector>
 #include <iostream>
-#pragma once
 #include <fstream>
 #include <string>
 #include <sstream>

@@ -75,23 +75,10 @@ void MatrixNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percent
         int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
             forwardPropagation(data.getImage(j));
-//            if(i==0&&j==0){
-//                qDebug()<<"Значения последнего слоя MNN.";
-//                for(int k=0;k<_valueNeruals[3].getRows();k++){
-//                    qDebug()<<_valueNeruals[3](k,0);
-//                }
-//            }
             backPropagation(data.getAnswer(j));
             updateWeight(i+1);
-//            if(i==0&&j==0){
-//                qDebug()<<"Ошибки последнего слоя MNN.";
-//                for(int k=0;k<_neuronWeightMat[1].getCols();k++){
-//                    qDebug()<<_neuronWeightMat[1](0,k);
-//                }
-//            }
         }
         _accuracyHistory.push_back(test(dataTest,percentTestData));
-        qDebug()<<_accuracyHistory.back();
     }
     _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn);
     _metrics.accuracy/=(_metrics.solutions.tp+_metrics.solutions.tn+_metrics.solutions.fp+_metrics.solutions.fn);
@@ -108,7 +95,6 @@ double MatrixNerualNetwork::test(Dataset &data, double percentTestData)
         forwardPropagation(data.getImage(j));
         accuracy+=isCorrectPrediction(data.getAnswer(j));
         calcSolutions(_metrics,data.getAnswer(j));
-//        qDebug()<<accuracy;
     }
     return static_cast<double>(accuracy)/dataSize;
 }
@@ -132,13 +118,76 @@ void MatrixNerualNetwork::calcSolutions(Metrics& metrics,int answer){
 
 bool MatrixNerualNetwork::isCorrectPrediction(int answer)
 {
-    int indexMax=0;
-    for(int i=1;i<static_cast<int>(TypeLayer::OUTPUT);i++){
-        if(_valueNeruals.back()(i,0)>_valueNeruals.back()(indexMax,0)){
-            indexMax=i;
+    return answer==findMaxIndex();
+}
+
+void MatrixNerualNetwork::saveWeights(std::string filename){
+    std::ofstream file(filename);
+    if(!file.is_open())
+        throw std::invalid_argument("This file can't be opened!");
+    file<<_numOfHiddenLayers<<'\n';
+    auto biosWeightsMat=_biosWeightMat.begin();
+    for(auto& weightsMat:_neuronWeightMat){
+        for(int j=0;j<weightsMat.getRows();j++){
+            file<<(*biosWeightsMat)(j,0)<<' ';
+            for(int k=0;k<weightsMat.getCols();k++){
+                file<<weightsMat(j,k)<<' ';
+            }
+            file<<'\n';
         }
     }
-    return indexMax==answer;
+}
+
+void MatrixNerualNetwork::loadWeights(std::string filename){
+    std::ifstream file(filename);
+    unsigned int numOflayers=0;
+    if(!file.is_open()){
+        throw std::invalid_argument("This file can't be opened!");
+    }
+    file>>numOflayers;
+    if(numOflayers!=_numOfHiddenLayers)
+        throw std::invalid_argument("This file is not for nerual network for!");
+    if(file.peek()=='\n') file.ignore();
+    double temp=0.0;
+    for(int i=0;i<static_cast<int>(_neuronWeightMat.size());i++){
+        for(int j=0;j<_neuronWeightMat[i].getRows();j++){
+            file>>temp;
+            _biosWeightMat[i].setValue(j,0,temp);
+            if (file.peek()==' ')file.ignore();
+            for(int k=0;k<_neuronWeightMat[i].getCols();++k){
+                file>>temp;
+                _neuronWeightMat[i].setValue(j,k,temp);
+                if(file.peek()==' ') file.ignore();
+            }
+            file.ignore();
+        }
+    }
+}
+
+void MatrixNerualNetwork::crossValidate(Dataset &dateTrain, int k)
+{
+    _accuracyHistory.clear();
+    int sizeDataTrain=dateTrain.getSize();
+    int stepByFor=sizeDataTrain/k;
+    for(int i=0;i<k;++k){
+        int start=stepByFor*i;
+        int end=stepByFor*(i+1);
+        for(int indexForData=start;indexForData<end;++indexForData){
+            forwardPropagation(dateTrain.getImage(indexForData));
+            backPropagation(dateTrain.getAnswer(indexForData));
+            updateWeight(1);
+        }
+        int accuracy=0;
+        for(int indexForData=0;indexForData<start;++indexForData){
+            forwardPropagation(dateTrain.getImage(indexForData));
+            accuracy+=isCorrectPrediction(dateTrain.getAnswer(indexForData));
+        }
+        for(int indexForData=end;indexForData<sizeDataTrain;++indexForData){
+            forwardPropagation(dateTrain.getImage(indexForData));
+            accuracy+=isCorrectPrediction(dateTrain.getAnswer(indexForData));
+        }
+        _accuracyHistory.push_back(accuracy/(sizeDataTrain-stepByFor));
+    }
 }
 
 

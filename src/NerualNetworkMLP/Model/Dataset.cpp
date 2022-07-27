@@ -25,7 +25,6 @@ void Dataset::parse(std::string &filename) {
     std::string currentLine = "";
     int imageInfo;
     if (!file.is_open()) {
-        qDebug() << "Error load dataset!";
         throw std::invalid_argument("Error load dataset!");
     }
     while (std::getline(file, currentLine)) {
@@ -34,7 +33,6 @@ void Dataset::parse(std::string &filename) {
         ss >> imageInfo;
         _answers.push_back(imageInfo - 1);
         if (ss.peek() != ',') {
-            qDebug() << "Error,wrong file!1";
             throw std::invalid_argument("Error,wrong file!1");
         }
         ss.ignore();
@@ -52,7 +50,7 @@ Dataset::Dataset(std::string &filename) : Dataset() {
     try {
         parse(filename);
     } catch (std::exception &e) {
-        throw std::invalid_argument("Error,wrong file!1");
+        throw e;
     }
 }
 
