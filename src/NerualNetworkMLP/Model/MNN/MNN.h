@@ -41,7 +41,9 @@ class MatrixNerualNetwork : public INerualNetwork {
     void saveWeights(std::string filename) override;
     void loadWeights(std::string filename) override;
     void crossValidate(Dataset& dateTrain, int k) override;
-    void setLearningRate(double value) override{}
+    void setLearningRate(double value) override{
+        lr=value;
+    }
     Metrics metrics()override{
         return _metrics;
     }

@@ -8,25 +8,24 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     std::string str=QFileDialog::getOpenFileName().toStdString();
-    std::string str1=QFileDialog::getOpenFileName().toStdString();
-    std::string w=QFileDialog::getOpenFileName().toStdString();
+//    std::string str1=QFileDialog::getOpenFileName().toStdString();
+//    std::string w=QFileDialog::getOpenFileName().toStdString();
     s21::Dataset date,dateTest;
     try {
         date.setDate(str);
-        dateTest.setDate(str1);
+//        dateTest.setDate(str1);
     }  catch (std::exception& e) {
         qDebug()<<e.what();
     }
-
-    qDebug()<<"train start";
-    auto begin = std::chrono::steady_clock::now();
-    s21::MatrixNerualNetwork gnn(2);
-    gnn.loadWeights(w);
-    gnn.train(date,dateTest,1,5);
-    auto end = std::chrono::steady_clock::now();
-    auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
-    qDebug() << "All time: " << elapsed_ms.count() << " s\n";
-    qDebug()<<gnn.getAccuracyHistory();
+//    qDebug()<<"train start";
+//    auto begin = std::chrono::steady_clock::now();
+//    s21::MatrixNerualNetwork gnn(2);
+////    gnn.loadWeights(w);
+//    gnn.train(date,dateTest,1,5);
+//    auto end = std::chrono::steady_clock::now();
+//    auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
+//    qDebug() << "All time: " << elapsed_ms.count() << " s\n";
+//    qDebug()<<gnn.getAccuracyHistory();
     return a.exec();
 }
 

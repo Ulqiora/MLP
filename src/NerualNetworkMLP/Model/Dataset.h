@@ -1,9 +1,10 @@
-#ifndef DATASET_H
-#define DATASET_H
+#pragma once
+#include <array>
 #include <vector>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <initializer_list>
 #include <sstream>
 #include <QDebug>
 #include "constantValues.h"
@@ -12,12 +13,19 @@ namespace s21{
 class Image{
 public:
     Image()=default;
+    Image(std::array<double,NUM_OF_PIXELS> values):_pixels(values){}
     Image(std::stringstream& imageString);
 
     double pixel(int i)const;
     std::array<double,NUM_OF_PIXELS>::const_iterator cbegin()const;
 
     std::array<double,NUM_OF_PIXELS>::const_iterator cend()const;
+    bool operator==(const Image& b)const {
+        return _pixels==b._pixels;
+    }
+    void setValue(int i,double value){
+        _pixels[i]=value;
+    }
 private:
     std::array<double,NUM_OF_PIXELS> _pixels;
 };
@@ -41,4 +49,3 @@ public:
     int getSize()const;
 };
 }    //     namespace s21
-#endif // DATASET_H

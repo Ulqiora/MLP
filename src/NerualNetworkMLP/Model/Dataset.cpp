@@ -3,11 +3,14 @@ namespace s21 {
 Image::Image(std::stringstream &imageString) {
     double pixel = 0.0;
     for (int i = 0; i < NUM_OF_PIXELS; ++i) {
+        if(i==783)
+            std::cout<<"au";
         imageString >> pixel;
         _pixels[i] = pixel / 255.0;
         if (imageString.peek() == ',' && i != NUM_OF_PIXELS - 1) {
             imageString.ignore();
-        } else if (!(imageString.eof() || imageString.peek() == '\r')) {
+        } else if (imageString.eof() || imageString.peek() == '\r' || imageString.peek()==(-1)) {
+            qDebug()<<"ALO:"<<imageString.peek();
             throw std::invalid_argument("Error, wrong file format");
         }
     }
