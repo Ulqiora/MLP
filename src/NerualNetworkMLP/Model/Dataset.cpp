@@ -3,14 +3,12 @@ namespace s21 {
 Image::Image(std::stringstream &imageString) {
     double pixel = 0.0;
     for (int i = 0; i < NUM_OF_PIXELS; ++i) {
-        if(i==783)
-            std::cout<<"au";
         imageString >> pixel;
         _pixels[i] = pixel / 255.0;
         if (imageString.peek() == ',' && i != NUM_OF_PIXELS - 1) {
             imageString.ignore();
-        } else if (imageString.eof() || imageString.peek() == '\r' || imageString.peek()==(-1)) {
-            qDebug()<<"ALO:"<<imageString.peek();
+        } else if (!(imageString.eof() || imageString.peek() == '\r' || imageString.peek()==(-1))) {
+//            qDebug()<<"ALO:"<<imageString.peek();
             throw std::invalid_argument("Error, wrong file format");
         }
     }
@@ -30,7 +28,9 @@ void Dataset::parse(std::string &filename) {
     if (!file.is_open()) {
         throw std::invalid_argument("Error load dataset!");
     }
+    // int i=0;
     while (std::getline(file, currentLine)) {
+        // std::cout<<i++<<std::endl;
         ss.clear();
         ss.str(currentLine);
         ss >> imageInfo;

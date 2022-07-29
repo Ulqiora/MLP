@@ -1,5 +1,5 @@
 #pragma once
-#include <ostream>
+#include <iostream>
 #include "Layer.h"
 #include "../INerualNetwork.h"
 namespace s21
@@ -36,5 +36,6 @@ public:
         forwardPropagation(image);
         return _layers.back().getIndexOfMaxValueNeuron();
     }
+    virtual ~GraphNerualNetwork(){}
 };
 } // namespace s21

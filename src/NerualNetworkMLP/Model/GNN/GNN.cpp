@@ -20,7 +20,7 @@ void GraphNerualNetwork::backPropagation(int answer) {
 
 void GraphNerualNetwork::updateWeight(int epoch) {
     for(int i=_numOfHiddenLayers+1;i>0;--i){
-        _layers[i].updateWeightNeurons(_layers[i-1],lr/epoch);
+        _layers[i].updateWeightNeurons(_layers[i-1],lr/sqrt(epoch));
     }
 }
 
@@ -39,11 +39,13 @@ void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentT
     for (int i = 0; i < epoch; i++) {
         int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
+            // std::cout<<j<<'\n';
             forwardPropagation(data.getImage(j));
             backPropagation(data.getAnswer(j));
             updateWeight(i+1);
         }
         _accuracyHistory.push_back(test(dataTest,percentTestData));
+        std::cout<<_accuracyHistory.back()<<'\n';
     }
     _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn);
     _metrics.accuracy/=(_metrics.solutions.tp+_metrics.solutions.tn+_metrics.solutions.fp+_metrics.solutions.fn);
@@ -56,6 +58,7 @@ double GraphNerualNetwork::test(Dataset& data, double percentTestData) {
     int dataSize=data.getSize()*percentTestData;
     int accuracy=0;
     for (int j = 0; j < dataSize; ++j) {
+        // std::cout<<j<<'\n';
         forwardPropagation(data.getImage(j));
         accuracy+=isCorrectPrediction(data.getAnswer(j));
         _layers.back().calcSolutions(_metrics,data.getAnswer(j));

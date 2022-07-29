@@ -294,9 +294,12 @@ int Matrix::getRows() const { return this->_rows; }
 int Matrix::getCols() const { return this->_cols; }
 
 void Matrix::setRandom(){
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist6(0,200);
     for(int i=0;i<_rows;i++){
         for(int j=0;j<_cols;j++){
-            _matrix[i][j]=QRandomGenerator::global()->bounded(-100, 100) / 100.0;;
+            _matrix[i][j]=(static_cast<double>(dist6(rng))-100.0) / 100.0;;
         }
     }
 }

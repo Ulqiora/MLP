@@ -1,10 +1,13 @@
  #include "Neuron.h"
 namespace s21 {
 Neuron::Neuron(TypeLayer numOfWeights,typeFunction type) : _value(0), _weights(static_cast<int>(numOfWeights)),_func(type) {
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist6(0,200);
     for (auto& i : _weights) {
-        i = QRandomGenerator::global()->bounded(-100, 100) / 100.0;
+        i = (static_cast<double>(dist6(rng))-100.0)/100.0;
     }
-    _bias=QRandomGenerator::global()->bounded(-100, 100) / 100.0;
+    _bias=(static_cast<double>(dist6(rng))-100.0)/100.0;
 }
 
 void Neuron::forwardPropagation(const std::vector<Neuron> &inputNeurons)

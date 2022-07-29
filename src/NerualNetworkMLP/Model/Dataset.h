@@ -6,7 +6,7 @@
 #include <string>
 #include <initializer_list>
 #include <sstream>
-#include <QDebug>
+//#include <QDebug>
 #include "constantValues.h"
 namespace s21{
 
