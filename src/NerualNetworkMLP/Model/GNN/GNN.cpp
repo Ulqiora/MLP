@@ -36,6 +36,7 @@ GraphNerualNetwork::GraphNerualNetwork(unsigned int numHiddenLayers) : _numOfHid
 void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentTestData,int epoch) {
     _accuracyHistory.clear();
     _metrics.reset();
+    auto begin = std::chrono::steady_clock::now();
     for (int i = 0; i < epoch; i++) {
         int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
@@ -47,8 +48,10 @@ void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentT
         _accuracyHistory.push_back(test(dataTest,percentTestData));
         std::cout<<_accuracyHistory.back()<<'\n';
     }
-    _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn);
-    _metrics.accuracy/=(_metrics.solutions.tp+_metrics.solutions.tn+_metrics.solutions.fp+_metrics.solutions.fn);
+    auto end = std::chrono::steady_clock::now();
+    auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
+    _metrics.seconds=elapsed_ms.count();
+    _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn)/(data.getSize()*epoch);
     _metrics.precision=_metrics.solutions.tp/(_metrics.solutions.tp+_metrics.solutions.fp);
     _metrics.recall=_metrics.solutions.tp/(_metrics.solutions.tp+_metrics.solutions.fn);
     _metrics.fMeasure=2*(_metrics.precision*_metrics.recall)/(_metrics.precision*_metrics.recall);

@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 struct Metrics{
     struct Solutions{
         int tp;
@@ -11,6 +12,7 @@ struct Metrics{
     double accuracy;
     double fMeasure;
     Solutions solutions;
+    int64_t seconds;
     void reset(){
         solutions.fn=0;
         solutions.tp=0;

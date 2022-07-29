@@ -84,6 +84,9 @@
         "ranges": "cpp",
         "stop_token": "cpp",
         "set": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "__bits": "cpp",
+        "any": "cpp",
+        "variant": "cpp"
     }
 }

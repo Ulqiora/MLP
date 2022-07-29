@@ -32,7 +32,7 @@ tests: ./$(BD)tests_file
 	./$(BD)tests_file 
 
 research: $(PROJECT_FILES_OBJ)
-	$(CC) $(LDFLAGS) $^ -o $(BD)$@ -lpthread -lsubunit -lrt -lm
+	$(CC) $(LDFLAGS) $^ -o $(BD)$@
 	./$(BD)research
 
 clean: 

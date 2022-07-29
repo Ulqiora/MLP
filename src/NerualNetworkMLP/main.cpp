@@ -9,10 +9,10 @@
 int main(/*int argc, char *argv[]*/)
 {
     std::cout<<"start data train parse"<<'\n';
-    std::string str1="/media/sf_E_DRIVE/GitHub/MLP/datasets/emnist-letters-train.csv";
-    std::string str2="/media/sf_E_DRIVE/GitHub/MLP/datasets/emnist-letters-test.csv";
-//    std::string str1="/media/sf_E_DRIVE/GitHub/MLP/datasets/train.txt";
-std::string weights="/media/sf_E_DRIVE/GitHub/MLP/src/NerualNetworkMLP/weights/weight_l2_2epoch_78_2703.txt";
+    std::string str1="/Users/jcraster/MLP/datasets/emnist-letters-train.csv";
+    std::string str2="/Users/jcraster/MLP/datasets/emnist-letters-test.csv";
+//    std::string str1="/Users/jcraster/MLP/datasets/train.txt";
+std::string weights="/Users/jcraster/MLP/src/NerualNetworkMLP/weights/weight_l2_2epoch_78_2703.txt";
     s21::Dataset data1(str1);
     std::cout<<"start data test parse"<<'\n';
     s21::Dataset data2(str2);
@@ -22,13 +22,13 @@ std::string weights="/media/sf_E_DRIVE/GitHub/MLP/src/NerualNetworkMLP/weights/w
     std::cout<<"train start"<<'\n';
     auto begin = std::chrono::steady_clock::now();
     gnn.train(data1,data2,1,50);
-    gnn.saveWeights("/media/sf_E_DRIVE/GitHub/MLP/src/NerualNetworkMLP/weights/random2.txt");
+    gnn.saveWeights("/Users/jcraster/MLP/src/NerualNetworkMLP/weights/random2.txt");
     auto end = std::chrono::steady_clock::now();
     auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
     std::cout << "All time: " << elapsed_ms.count() << " s\n";
     return 0;
-//    std::string str2="/media/sf_E_DRIVE/GitHub/MLP/datasets/emnist-letters-test.csv";
-//    std::string str1="/media/sf_E_DRIVE/GitHub/MLP/datasets/train.txt";
+//    std::string str2="/Users/jcraster/MLP/datasets/emnist-letters-test.csv";
+//    std::string str1="/Users/jcraster/MLP/datasets/train.txt";
 //    QApplication a(argc, argv);
 //    std::string str=QFileDialog::getOpenFileName().toStdString();
 //    std::string str1=QFileDialog::getOpenFileName().toStdString();

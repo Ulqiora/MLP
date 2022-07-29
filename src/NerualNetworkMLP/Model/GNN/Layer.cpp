@@ -13,17 +13,17 @@ void Layer::calcSolutions(Metrics &metrics,int answer)
 {
     if(_type!=TypeLayer::OUTPUT) throw std::invalid_argument("This layer is not output!");
     for(int i=0;i<getNumOfNeurons();++i){
-        if(i==answer){
-            if(i==getIndexOfMaxValueNeuron()){
+        if(answer==0){
+            if(getIndexOfMaxValueNeuron()==0){
                 metrics.solutions.tp++;
-            } else {
-                metrics.solutions.fn++;
+            }else {
+                metrics.solutions.fp++;
             }
         } else {
-            if(i==getIndexOfMaxValueNeuron()){
-                metrics.solutions.fp++;
-            } else {
+            if(getIndexOfMaxValueNeuron()!=0){
                 metrics.solutions.tn++;
+            }else {
+                metrics.solutions.fn++;
             }
         }
     }
