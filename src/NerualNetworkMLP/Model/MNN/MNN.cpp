@@ -71,20 +71,26 @@ void MatrixNerualNetwork::updateWeight(int numOfEpoch)
 void MatrixNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentTestData,int numOfEpoch)
 {
     _accuracyHistory.clear();
+    _metrics.reset();
+    auto begin = std::chrono::steady_clock::now();
     for (int i = 0; i < numOfEpoch; i++) {
         int dataSize = data.getSize();
         for (int j = 0; j < dataSize; ++j) {
+            // std::cout<<j<<'\n';
             forwardPropagation(data.getImage(j));
             backPropagation(data.getAnswer(j));
             updateWeight(i+1);
         }
         _accuracyHistory.push_back(test(dataTest,percentTestData));
+        std::cout<<_accuracyHistory.back()<<'\n';
     }
-    _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn);
-    _metrics.accuracy/=(_metrics.solutions.tp+_metrics.solutions.tn+_metrics.solutions.fp+_metrics.solutions.fn);
-    _metrics.precision=_metrics.solutions.tp/(_metrics.solutions.tp+_metrics.solutions.fp);
-    _metrics.recall=_metrics.solutions.tp/(_metrics.solutions.tp+_metrics.solutions.fn);
-    _metrics.fMeasure=2*(_metrics.precision*_metrics.recall)/(_metrics.precision*_metrics.recall);
+    auto end = std::chrono::steady_clock::now();
+    auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
+    _metrics.seconds=elapsed_ms.count();
+    _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn)/(data.getSize()*numOfEpoch);
+    _metrics.precision=static_cast<double>(_metrics.solutions.tp)/(_metrics.solutions.tp+_metrics.solutions.fp);
+    _metrics.recall=static_cast<double>(_metrics.solutions.tp)/(_metrics.solutions.tp+_metrics.solutions.fn);
+    _metrics.fMeasure=2.0*(_metrics.precision*_metrics.recall)/(static_cast<double>(_metrics.precision)*_metrics.recall);
 }
 
 double MatrixNerualNetwork::test(Dataset &data, double percentTestData)
