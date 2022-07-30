@@ -51,7 +51,7 @@ void GraphNerualNetwork::train(Dataset& data,Dataset&  dataTest, double percentT
     auto end = std::chrono::steady_clock::now();
     auto elapsed_ms = std::chrono::duration_cast<std::chrono::seconds>(end - begin);
     _metrics.seconds=elapsed_ms.count();
-    _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn)/(data.getSize()*epoch);
+    _metrics.accuracy =(_metrics.solutions.tp+_metrics.solutions.tn)/static_cast<double>(data.getSize()*epoch);
     _metrics.precision=static_cast<double>(_metrics.solutions.tp)/(_metrics.solutions.tp+_metrics.solutions.fp);
     _metrics.recall=static_cast<double>(_metrics.solutions.tp)/(_metrics.solutions.tp+_metrics.solutions.fn);
     _metrics.fMeasure=2.0*(_metrics.precision*_metrics.recall)/(static_cast<double>(_metrics.precision)*_metrics.recall);
