@@ -1,12 +1,13 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef SRC_NERUALNETWORKMLP_MODEL_MNN_MATRIX_H_
+#define SRC_NERUALNETWORKMLP_MODEL_MNN_MATRIX_H_
 #include <cmath>
 #include <iostream>
-#include <vector>
 #include <random>
-#include "../constantValues.h"
+#include <vector>
+
 #include "../Dataset.h"
-namespace s21{
+#include "../constantValues.h"
+namespace s21 {
 class Matrix {
     friend Matrix operator*(const Matrix& other, double const num);
     friend Matrix operator*(double const num, const Matrix& other);
@@ -22,7 +23,7 @@ class Matrix {
  public:
     Matrix();
     Matrix(int rows, int cols);
-    Matrix(const Image& pixels);
+    explicit Matrix(const Image& pixels);
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     ~Matrix();
@@ -52,14 +53,14 @@ class Matrix {
     Matrix inverse_matrix();
 
     double operator()(int i, int j) const;
-    void setValue(int i, int j,double value);
+    void setValue(int i, int j, double value);
     // other
-    int getRows()const;
-    int getCols()const;
+    int getRows() const;
+    int getCols() const;
     void setRandom();
     void setValueForAll(double value);
-    void print()const;
+    void print() const;
 };
-}
+}  // namespace s21
 
-#endif // MATRIX_H
+#endif  // SRC_NERUALNETWORKMLP_MODEL_MNN_MATRIX_H_

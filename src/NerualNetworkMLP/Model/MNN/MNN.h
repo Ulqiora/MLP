@@ -1,7 +1,7 @@
 #pragma once
 #include "../ActivateFunction.h"
-#include "../INerualNetwork.h"
 #include "../Dataset.h"
+#include "../INerualNetwork.h"
 
 namespace s21 {
 class MatrixNerualNetwork : public INerualNetwork {
@@ -23,34 +23,29 @@ class MatrixNerualNetwork : public INerualNetwork {
     void forwardPropagation(const Image& image);
     void backPropagation(int answer);
     void updateWeight(int numOfEpoch);
-    void calcSolutions(Metrics& metrics,int answer);
+    void calcSolutions(Metrics& metrics, int answer);
     bool isCorrectPrediction(int answer);
-    int findMaxIndex(){
-        int indexMax=0;
-        for(int i=1;i<static_cast<int>(TypeLayer::OUTPUT);i++){
-            if(_valueNeruals.back()(i,0)>_valueNeruals.back()(indexMax,0)){
-                indexMax=i;
+    int findMaxIndex() {
+        int indexMax = 0;
+        for (int i = 1; i < static_cast<int>(TypeLayer::OUTPUT); i++) {
+            if (_valueNeruals.back()(i, 0) > _valueNeruals.back()(indexMax, 0)) {
+                indexMax = i;
             }
         }
         return indexMax;
     }
+
  public:
-    MatrixNerualNetwork(unsigned int numHiddenLayers);
-    void train(Dataset& data, Dataset& dataTest, double percentTestData, int numOfEpoch) override;
-    double test(Dataset& data, double percentTestData) override;
+    explicit MatrixNerualNetwork(unsigned int numHiddenLayers);
+    void train(const Dataset& data, const Dataset& dataTest, double percentTestData, int numOfEpoch) override;
+    double test(const Dataset& data, double percentTestData) override;
     void saveWeights(std::string filename) override;
     void loadWeights(std::string filename) override;
     void crossValidate(Dataset& dateTrain, int k) override;
-    void setLearningRate(double value) override{
-        lr=value;
-    }
-    Metrics metrics()override{
-        return _metrics;
-    }
-    virtual std::vector<double> getAccuracyHistory() override{
-        return _accuracyHistory;
-    }
-    virtual int predict(const Image& image)override{
+    void setLearningRate(double value) override { lr = value; }
+    Metrics metrics() override { return _metrics; }
+    std::vector<double> getAccuracyHistory() override { return _accuracyHistory; }
+    int predict(const Image& image) override {
         forwardPropagation(image);
         return findMaxIndex();
     }

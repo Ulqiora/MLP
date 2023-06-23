@@ -1,5 +1,5 @@
 #include "Matrix.h"
-namespace s21{
+namespace s21 {
 Matrix::Matrix() : _rows(1), _cols(1) { this->_matrix = New_matrix(1, 1); }
 
 Matrix::Matrix(int rows, int cols) : _rows(rows), _cols(cols) {
@@ -12,10 +12,10 @@ Matrix::Matrix(int rows, int cols) : _rows(rows), _cols(cols) {
     }
 }
 
-Matrix::Matrix(const Image& image):_rows(NUM_OF_PIXELS),_cols(1){
-    _matrix=New_matrix(this->_rows, this->_cols);
-    for(int i=0;i<_rows;i++){
-        _matrix[i][0]=image.pixel(i);
+Matrix::Matrix(const Image& image) : _rows(NUM_OF_PIXELS), _cols(1) {
+    _matrix = New_matrix(this->_rows, this->_cols);
+    for (int i = 0; i < _rows; i++) {
+        _matrix[i][0] = image.pixel(i);
     }
 }
 
@@ -44,12 +44,12 @@ double** Matrix::New_matrix(int rows, int cols) {
 }
 
 void Matrix::Free_matrix() {
-    if(_matrix!=nullptr){
+    if (_matrix != nullptr) {
         for (int i = 0; i < _rows; i++) {
             delete[] _matrix[i];
         }
         delete[] _matrix;
-        _matrix=nullptr;
+        _matrix = nullptr;
     }
 }
 
@@ -198,9 +198,7 @@ double Matrix::operator()(int i, int j) const {
     }
 }
 
-void Matrix::setValue(int i, int j,double value){
-    _matrix[i][j]=value;
-}
+void Matrix::setValue(int i, int j, double value) { _matrix[i][j] = value; }
 
 Matrix Matrix::transpose() {
     Matrix result(this->_cols, this->_rows);
@@ -220,7 +218,7 @@ Matrix Matrix::create_minor(int row, int column) {
         if (i != row) {
             for (int j = 0; j < this->_cols; j++) {
                 if (j != column) {
-                    minor._matrix[i - flag_row] [j - flag_column] = (*this)(i, j);
+                    minor._matrix[i - flag_row][j - flag_column] = (*this)(i, j);
                 } else {
                     flag_column = 1;
                 }
@@ -293,31 +291,31 @@ int Matrix::getRows() const { return this->_rows; }
 
 int Matrix::getCols() const { return this->_cols; }
 
-void Matrix::setRandom(){
+void Matrix::setRandom() {
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist6(0,200);
-    for(int i=0;i<_rows;i++){
-        for(int j=0;j<_cols;j++){
-            _matrix[i][j]=(static_cast<double>(dist6(rng))-100.0) / 100.0;;
+    std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 200);
+    for (int i = 0; i < _rows; i++) {
+        for (int j = 0; j < _cols; j++) {
+            _matrix[i][j] = (static_cast<double>(dist6(rng)) - 100.0) / 100.0;
         }
     }
 }
 
-void Matrix::setValueForAll(double value){
-    for(int i=0;i<_rows;i++){
-        for(int j=0;j<_cols;j++){
-            _matrix[i][j]=value;
+void Matrix::setValueForAll(double value) {
+    for (int i = 0; i < _rows; i++) {
+        for (int j = 0; j < _cols; j++) {
+            _matrix[i][j] = value;
         }
     }
 }
 
 void Matrix::print() const {
-    for(int i=0;i<_rows;i++){
-        for(int j=0;j<_cols;j++){
-            std::cout<< _matrix[i][j]<<" ";
+    for (int i = 0; i < _rows; i++) {
+        for (int j = 0; j < _cols; j++) {
+            std::cout << _matrix[i][j] << " ";
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
     }
 }
-}    //    namespace s21
+}  //    namespace s21

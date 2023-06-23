@@ -1,23 +1,21 @@
-#ifndef QPAINTER_H
-#define QPAINTER_H
+#ifndef SRC_NERUALNETWORKMLP_CUSTOMWIDGET_QPAINTER_H_
+#define SRC_NERUALNETWORKMLP_CUSTOMWIDGET_QPAINTER_H_
 
-#include <QWidget>
-#include <QTimer>
-#include <QResizeEvent>
 #include <QMouseEvent>
+#include <QResizeEvent>
+#include <QTimer>
+#include <QWidget>
 
-class QPainter : public QWidget
-{
+class QPainter : public QWidget {
     Q_OBJECT
 
-public:
+ public:
     explicit QPainter(QWidget *parent = nullptr);
 
-private:
-
-private:
-    void resizeEvent(QResizeEvent * event);
+ private:
+ private:
+    void resizeEvent(QResizeEvent *event);
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
 };
-#endif // QPAINTER_H
+#endif  // SRC_NERUALNETWORKMLP_CUSTOMWIDGET_QPAINTER_H_
